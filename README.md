@@ -1,14 +1,16 @@
-# Coastal Keys
+# Coastal Compass
 
-An experimental real estate web application built with React and Node.js to demonstrate interactions with the RapidAPI Zillow API. This project serves as a learning tool for understanding how to integrate third-party real estate APIs into modern web applications.
+A full-stack web application that provides a **conversational, natural-language experience** for searching residential real estate. Users can describe what they're looking for in plain English, and the system translates those prompts into structured search criteria, fetches matching listings via the Zillow API, and displays results in a modern, responsive UI.
 
 ## 🚀 Features
 
-- **Property Search**: Search for homes using location-based queries
-- **Advanced Filtering**: Filter by price range, property type, bedrooms, bathrooms, and square footage
-- **Sorting Options**: Sort results by price, square footage, or date
-- **Responsive Design**: Clean, modern UI that works on desktop and mobile
-- **Real-time API Integration**: Direct integration with Zillow's real estate data via RapidAPI
+- **Conversational Search**: Describe your dream home in natural language (e.g., "Show me 3-bedroom homes near La Jolla under $2M with ocean views")
+- **LLM-Powered Parsing**: Advanced language model integration to understand and process user prompts into precise filter criteria
+- **Multi-turn Dialogue**: Refine your search through conversational follow-ups (e.g., "Make it 4 bedrooms instead" or "Show me condos instead")
+- **Filter Transparency**: Always see the current active filters being applied, adjustable through both conversation and traditional UI controls
+- **Zillow API Integration**: Real-time access to comprehensive real estate data via RapidAPI proxy
+- **Modern UI**: Responsive, accessible design built with React, TypeScript, Tailwind CSS, and shadcn/ui components
+- **Advanced Filtering**: Traditional controls for price range, property type, bedrooms, bathrooms, square footage, and sorting options
 
 ## 🏗️ Architecture
 
@@ -29,8 +31,8 @@ Before running this application, you'll need:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/jsanfil/rapidapi-zillow-sample.git
-   cd rapidapi-zillow-sample
+   git clone https://github.com/jsanfil/coastal-compass.git
+   cd coastal-compass
    ```
 
 2. **Install server dependencies:**
@@ -60,7 +62,7 @@ Before running this application, you'll need:
    RAPIDAPI_KEY=your_rapidapi_key_here
    RAPIDAPI_HOST=zillow-com1.p.rapidapi.com
    ZILLOW_SEARCH_PATH=/search
-   PORT=4000
+   PORT=3001
    ```
 
    Replace `your_rapidapi_key_here` with your actual RapidAPI key.
@@ -72,7 +74,7 @@ Before running this application, you'll need:
    cd server
    npm start
    ```
-   The server will run on `http://localhost:4000`
+   The server will run on `http://localhost:3001`
 
 2. **Start the client (in a new terminal):**
    ```bash
@@ -116,18 +118,35 @@ GET /api/search?location=Carlsbad,CA&minPrice=100000&maxPrice=500000&propertyTyp
 ### Project Structure
 
 ```
-rapidapi-zillow-sample/
+coastal-compass/
 ├── client/                 # React frontend
+│   ├── public/
+│   │   └── images/         # Static assets (logos, etc.)
 │   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── App.jsx         # Main app component
-│   │   └── main.jsx        # App entry point
+│   │   ├── components/     # React components (FilterPanel, PropertyCard, PropertyGrid)
+│   │   ├── App.jsx         # Main app component with search logic
+│   │   ├── main.jsx        # App entry point
+│   │   └── index.css       # Global styles with Tailwind
 │   ├── package.json
-│   └── vite.config.js
+│   ├── vite.config.js      # Vite configuration
+│   ├── tailwind.config.js  # Tailwind CSS configuration
+│   └── postcss.config.js   # PostCSS configuration
 ├── server/                 # Node.js backend
-│   ├── index.js            # Express server
-│   ├── .env.example        # Environment template
-│   └── package.json
+│   ├── index.js            # Express server with Zillow API proxy
+│   ├── .env.example        # Environment variables template
+│   ├── package.json
+│   └── package-lock.json
+├── memory-bank/            # Project documentation and context
+│   ├── projectbrief.md     # Core project requirements and goals
+│   ├── productContext.md   # Why project exists and user experience goals
+│   ├── activeContext.md    # Current work focus and recent changes
+│   ├── systemPatterns.md   # Architectural patterns and decisions
+│   ├── techContext.md      # Technology stack and constraints
+│   └── progress.md         # Development progress and milestones
+├── .clinerules/            # Project guardrails and conventions
+├── .gitignore
+├── package.json            # Root package.json (workspace)
+├── package-lock.json
 └── README.md
 ```
 
@@ -135,12 +154,30 @@ rapidapi-zillow-sample/
 
 This project demonstrates:
 
-- **API Integration**: How to work with third-party REST APIs
-- **Full-Stack Development**: Client-server communication patterns
-- **React State Management**: Managing complex filter states
-- **Responsive UI Design**: Creating mobile-friendly interfaces
-- **Environment Configuration**: Secure handling of API keys
-- **Error Handling**: Graceful handling of API failures
+- **Conversational AI Integration**: Implementing natural language processing for user interactions
+- **LLM Integration**: Working with large language models to parse and understand user intent
+- **Multi-turn Dialogue Systems**: Building conversational interfaces that maintain context
+- **API Integration**: How to work with third-party REST APIs securely
+- **Full-Stack Development**: Client-server communication patterns and state synchronization
+- **React State Management**: Managing complex filter states across conversational and traditional UI
+- **Responsive UI Design**: Creating mobile-friendly interfaces with modern design systems
+- **Environment Configuration**: Secure handling of API keys and sensitive configuration
+- **Error Handling**: Graceful handling of API failures and user input validation
+
+## 🚧 Current Development Status
+
+**Implemented:**
+- Basic Zillow API integration with property search and display
+- Traditional filter controls (price, location, property type, beds/baths, sqft)
+- Responsive React UI with Tailwind CSS styling
+- Server-side API proxy for secure key management
+
+**Planned (Not Yet Implemented):**
+- Conversational search interface with natural language input
+- LLM-powered prompt parsing and filter extraction
+- Multi-turn dialogue support for search refinement
+- Filter transparency and synchronization between conversation and UI controls
+- Enhanced user experience with loading states and error handling
 
 ## 🤝 Contributing
 

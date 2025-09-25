@@ -54,12 +54,12 @@ export default function App() {
 
         <header className="flex items-center gap-3 mb-5">
           <img
-            src="/images/coastal-keys-logo.svg"
-            alt="Coastal Keys logo"
+            src="/images/coastal-compass-logo.svg"
+            alt="Coastal Compass logo"
             className="h-10 w-10"
           />
           <h1 className="text-3xl font-semibold text-blue-teal tracking-tight">
-            Coastal Keys
+            Coastal Compass
           </h1>
         </header>
 

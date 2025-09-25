@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Coastal Compass icon</title>
+  <desc id="desc">A simple compass rose with a wave motif.</desc>
+
+  <rect width="128" height="128" rx="24" fill="#EAF2F0"/>
+
+  <!-- Compass outer -->
+  <circle cx="64" cy="64" r="48" fill="#6D98A5"/>
+  <circle cx="64" cy="64" r="42" fill="#BFD3CE"/>
+
+  <!-- Needle -->
+  <polygon points="64,28 78,64 64,100 50,64" fill="#0F3D4C"/>
+  <polygon points="64,38 74,64 64,90 54,64" fill="#FDB813"/>
+
+  <!-- Wave at bottom -->
+  <path d="M28 78c10 0 15-8 25-8s15 8 25 8 15-8 25-8 15 8 25 8v10H28V78z" fill="#6D98A5" opacity="0.9"/>
+</svg>
