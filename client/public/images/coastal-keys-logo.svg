@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title>Coastal Keys — Key and Wave</title>
+  <desc>Minimal key with a seashell-like head and a wave motif in coastal colors.</desc>
+  <defs>
+    <linearGradient id="wave" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#91B7BE" />
+      <stop offset="100%" stop-color="#6D98A5" />
+    </linearGradient>
+  </defs>
+  <path d="M34 30 a14 14 0 1 0 28 0 a14 14 0 1 0 -28 0 Z"
+        fill="none" stroke="#6D98A5" stroke-width="4"/>
+  <path d="M62 30 c-3 -5 -9 -8 -14 -8 c-5 0 -11 3 -14 8"
+        fill="none" stroke="#91B7BE" stroke-width="3" stroke-linecap="round"/>
+  <path d="M48 44 L48 68 L40 68 L40 76 L32 76 L32 84"
+        fill="none" stroke="#6D98A5" stroke-width="4"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14 84 c6 0 10 6 18 6 s12-6 20-6 s12 6 20 6 s12-6 20-6"
+        fill="none" stroke="url(#wave)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="70" cy="30" r="3" fill="#D9A391" />
+</svg>
