@@ -5,7 +5,7 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const { RAPIDAPI_KEY, RAPIDAPI_HOST, ZILLOW_SEARCH_PATH = "/search", PORT = 4000 } = process.env;
+const { RAPIDAPI_KEY, RAPIDAPI_HOST, ZILLOW_SEARCH_PATH = "/search", PORT = 3001 } = process.env;
 
 const app = express();
 app.use(cors());
