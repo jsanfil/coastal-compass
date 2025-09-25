@@ -3,7 +3,7 @@ import FilterPanel from './components/FilterPanel'
 import PropertyGrid from './components/PropertyGrid'
 
 
-const API = 'http://localhost:4000'
+const API = 'http://localhost:3001'
 
 export default function App() {
   const [properties, setProperties] = useState([])
