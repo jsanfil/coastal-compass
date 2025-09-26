@@ -38,7 +38,7 @@ export default function ConversationInterface({ conversation, onSubmit, loading,
             {/* Conversation History */}
             {conversation.length > 0 && (
                 <div className="p-4 border-b border-teal-border/30">
-                    <h3 className="text-sm font-medium text-blue-teal mb-3">Conversation</h3>
+                    <h3 className="font-medium text-blue-teal mb-3">Conversation</h3>
                     <div className="max-h-48 overflow-y-auto space-y-3" ref={scrollRef}>
                         {conversation.map((message, index) => (
                             <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>

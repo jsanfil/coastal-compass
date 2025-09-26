@@ -17,10 +17,17 @@ Tracks the current state of development.
   - ActiveFiltersBar component removed as unused (functionality moved inline to PropertyGrid)
   - Code cleanup: removed unused imports and handler functions from App.jsx
   - Port configuration aligned (server running on 3001, client proxy configured correctly)
+  - Multi-turn dialogue support implemented with conversation history and context-aware LLM responses
+  - ConversationInterface component created to integrate history and input into single cohesive control
+  - Auto-scroll functionality added to conversation history for improved UX
+  - Dual filter control synchronization: conversation and traditional filters stay in sync
+  - Filter change highlighting: newly modified filters pulse with warm-coral background for 3 seconds
+  - Location preservation fix: location persists in multi-turn conversations unless explicitly changed
+  - UI typography consistency: Conversation and Advanced Filters headers now match in font size
 
 - Next steps:
-  - Enhance UI to support both conversational and traditional filter controls
   - Add user experience improvements (loading states, empty states, error states)
+  - Testing (unit tests, integration tests for API endpoints)
 
 - Active decisions & considerations:
   - Using RapidAPI for Zillow API access to avoid direct scraping
@@ -40,3 +47,7 @@ Tracks the current state of development.
   - Client expects consistent property object structure (id, address, city, state, price, beds, baths, sqft, propertyType, imgSrc, permalink)
   - Port configuration needs alignment between client and server
   - Current implementation supports traditional filters but lacks conversational features
+  - Location preservation is critical for multi-turn conversations - users expect location to persist unless explicitly changed
+  - Filter change highlighting provides essential visual feedback for seamless conversation-to-traditional switching
+  - Shared state pattern enables perfect synchronization between conversational and traditional filter controls
+  - UI consistency (typography, spacing) enhances perceived professionalism and user trust

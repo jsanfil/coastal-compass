@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ConversationInterface from './components/ConversationInterface'
 import CollapsibleFilterPanel from './components/CollapsibleFilterPanel'
 import PropertyGrid from './components/PropertyGrid'
@@ -21,6 +21,30 @@ export default function App() {
     sqftMax: '',
     sort: 'Price_High_Low'
   })
+  const [previousFilters, setPreviousFilters] = useState(filters)
+  const [changedFilters, setChangedFilters] = useState(new Set())
+
+  // Detect filter changes and highlight them
+  useEffect(() => {
+    const changed = new Set()
+    Object.keys(filters).forEach(key => {
+      if (filters[key] !== previousFilters[key]) {
+        changed.add(key)
+      }
+    })
+
+    if (changed.size > 0) {
+      setChangedFilters(changed)
+      setPreviousFilters(filters)
+
+      // Remove highlight after 3 seconds
+      const timeout = setTimeout(() => {
+        setChangedFilters(new Set())
+      }, 3000)
+
+      return () => clearTimeout(timeout)
+    }
+  }, [filters, previousFilters])
 
   // Search using traditional filters
   async function search() {
@@ -169,6 +193,7 @@ export default function App() {
               properties={properties}
               loading={loading}
               filters={filters}
+              changedFilters={changedFilters}
             />
           </div>
 

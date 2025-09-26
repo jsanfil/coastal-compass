@@ -14,7 +14,7 @@ export default function CollapsibleFilterPanel({ filters, onFiltersChange, onSea
                     <span className="text-lg">⚙️</span>
                     <div>
                         <div className="font-medium text-blue-teal">
-                            Advanced Filters & Search History
+                            Advanced Filters
                         </div>
                         <div className="text-sm text-gray-500">
                             Fine-tune your search with detailed controls

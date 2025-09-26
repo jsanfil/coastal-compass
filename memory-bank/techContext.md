@@ -26,11 +26,13 @@ Technologies and constraints that shape the system.
   - Frontend: React, React DOM, Tailwind CSS, PostCSS, Autoprefixer
   - Backend: Express, CORS, dotenv, node-fetch
   - Dev dependencies: Vite plugins, ESLint (implied), Nodemon
-  - External APIs: Zillow API via RapidAPI (propertyExtendedSearch endpoint)
+  - External APIs: Zillow API via RapidAPI (propertyExtendedSearch endpoint), OpenRouter API (Claude-3-Haiku for LLM parsing)
 
 - Usage patterns:
-  - Client fetches from hardcoded localhost:3001/api/search (needs port alignment)
-  - Server builds URLSearchParams for API requests
+  - Client fetches from hardcoded localhost:3001/api/search and /api/parse-prompt
+  - Server builds URLSearchParams for API requests and JSON payloads for LLM calls
   - Response data normalization handles multiple possible Zillow API response formats
+  - LLM parsing preserves conversation context and location unless explicitly changed
+  - Filter synchronization uses shared state with change detection and highlighting
   - Error handling with console logging and structured error responses
   - State management via React useState hooks (no external state libraries)

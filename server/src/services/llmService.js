@@ -22,6 +22,7 @@ export class LLMService {
      * @returns {Promise<Object>} Parsed filters and assistant message
      */
     async parsePromptToFilters(prompt, currentFilters = {}, history = []) {
+        const currentFiltersCopy = { ...currentFilters }; // Preserve original for context
         try {
             const systemPrompt = this._buildSystemPrompt(currentFilters);
             const messages = [{ role: "system", content: systemPrompt }];
@@ -64,7 +65,7 @@ export class LLMService {
 
             console.log('LLM Raw response:', content);
 
-            const parsedResult = this._parseLLMResponse(content);
+            const parsedResult = this._parseLLMResponse(content, currentFiltersCopy);
             console.log('Parsed filters:', parsedResult);
 
             return parsedResult;
@@ -102,9 +103,10 @@ Instructions:
 2. Only include filters that are explicitly mentioned or clearly implied
 3. For price ranges, convert to minPrice/maxPrice (e.g., "under $1M" → maxPrice: "1000000")
 4. For bedroom/bathroom counts, use bedsMin/bathsMin for minimums
-5. If refining existing filters, merge with current state appropriately
-6. Provide a natural, conversational response acknowledging the user's request
-7. Return valid JSON with "filters" object and "message" string for user feedback${currentFiltersText}
+5. IMPORTANT: Location is always required. If no new location is mentioned in this turn, preserve the current location from context. Never remove or reset location to default unless user explicitly requests a new location.
+6. If refining existing filters, merge with current state appropriately
+7. Provide a natural, conversational response acknowledging the user's request
+8. Return valid JSON with "filters" object and "message" string for user feedback${currentFiltersText}
 
 Response format:
 {
@@ -121,9 +123,10 @@ Response format:
     /**
      * Parse LLM response into structured format
      * @param {string} content - Raw LLM response
+     * @param {Object} currentFilters - Current filter state for context
      * @returns {Object} Parsed result with filters and explanation
      */
-    _parseLLMResponse(content) {
+    _parseLLMResponse(content, currentFilters = {}) {
         try {
             // Try to extract JSON from the response
             const jsonMatch = content.match(/\{[\s\S]*\}/);
@@ -138,9 +141,9 @@ Response format:
                 throw new Error("Invalid response structure: missing filters object");
             }
 
-            // Ensure required fields have defaults
+            // Preserve existing location if not explicitly overridden, otherwise use default
             const filters = {
-                location: parsed.filters.location || "Aptos, CA",
+                location: parsed.filters.location || currentFilters.location || "Aptos, CA",
                 ...parsed.filters
             };
 

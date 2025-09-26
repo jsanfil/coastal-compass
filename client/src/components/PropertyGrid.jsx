@@ -53,7 +53,7 @@ const formatFilterLabel = (key, value) => {
     return `${label}: ${value}`
 }
 
-export default function PropertyGrid({ properties, loading, filters }) {
+export default function PropertyGrid({ properties, loading, filters, changedFilters = new Set() }) {
     // Check if there are any active filters to display
     const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
         if (key === 'location' && value === 'Aptos, CA') return false // Default location
@@ -106,10 +106,12 @@ export default function PropertyGrid({ properties, loading, filters }) {
                     <div className="flex flex-wrap gap-2">
                         {Object.entries(filters).map(([key, value]) => {
                             const formatted = formatFilterLabel(key, value)
+                            const isChanged = changedFilters.has(key)
                             return formatted ? (
                                 <span
                                     key={key}
-                                    className="bg-sage-green text-blue-teal px-2 py-1 rounded text-xs"
+                                    className={`bg-sage-green text-blue-teal px-2 py-1 rounded text-xs transition-all duration-300 ${isChanged ? 'animate-pulse bg-warm-coral text-white' : ''
+                                        }`}
                                 >
                                     {formatted}
                                 </span>
