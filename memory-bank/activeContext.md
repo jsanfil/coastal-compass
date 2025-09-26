@@ -26,7 +26,6 @@ Tracks the current state of development.
   - UI typography consistency: Conversation and Advanced Filters headers now match in font size
 
 - Next steps:
-  - Add user experience improvements (loading states, empty states, error states)
   - Testing (unit tests, integration tests for API endpoints)
 
 - Active decisions & considerations:

@@ -10,6 +10,8 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [conversationLoading, setConversationLoading] = useState(false)
   const [conversation, setConversation] = useState([]) // Array of {role, content, timestamp, filters?}
+  const [error, setError] = useState(null)
+  const [conversationError, setConversationError] = useState(null)
   const [filters, setFilters] = useState({
     location: 'Aptos, CA',
     minPrice: '',
@@ -46,9 +48,31 @@ export default function App() {
     }
   }, [filters, previousFilters])
 
+  // Handle retry events
+  useEffect(() => {
+    const handleRetrySearch = () => {
+      search()
+    }
+
+    const handleRetryConversation = () => {
+      setConversationError(null)
+      // The last user message should still be in the conversation history
+      // We could potentially re-submit the last user message, but for now just clear the error
+    }
+
+    window.addEventListener('retrySearch', handleRetrySearch)
+    window.addEventListener('retryConversation', handleRetryConversation)
+
+    return () => {
+      window.removeEventListener('retrySearch', handleRetrySearch)
+      window.removeEventListener('retryConversation', handleRetryConversation)
+    }
+  }, [])
+
   // Search using traditional filters
   async function search() {
     setLoading(true)
+    setError(null)
     try {
       // Build query parameters, filtering out empty values
       const queryParams = new URLSearchParams()
@@ -59,10 +83,14 @@ export default function App() {
       })
 
       const response = await fetch(`${API}/api/search?${queryParams.toString()}`)
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.status} ${response.statusText}`)
+      }
       const data = await response.json()
       setProperties(data.items || [])
     } catch (error) {
       console.error('Search failed:', error)
+      setError(error.message || 'Failed to search properties. Please try again.')
       setProperties([])
     } finally {
       setLoading(false)
@@ -72,6 +100,8 @@ export default function App() {
   // Handle conversation input - parse natural language and search
   async function handleConversationSubmit(prompt) {
     setConversationLoading(true)
+    setConversationError(null)
+    setError(null)
     try {
       // Add user message to conversation history
       const userMessage = {
@@ -101,7 +131,7 @@ export default function App() {
       })
 
       if (!parseResponse.ok) {
-        throw new Error('Failed to parse prompt')
+        throw new Error(`I don't understand that request. Try something like "3 bedroom homes under $2M" or "Beach properties in Aptos".`)
       }
 
       const parseData = await parseResponse.json()
@@ -130,12 +160,16 @@ export default function App() {
       })
 
       const searchResponse = await fetch(`${API}/api/search?${searchParams.toString()}`)
+      if (!searchResponse.ok) {
+        throw new Error(`Property search failed. Please try again.`)
+      }
       const searchData = await searchResponse.json()
       setProperties(searchData.items || [])
 
     } catch (error) {
       console.error('Conversation search failed:', error)
-      setProperties([])
+      setConversationError(error.message || 'Sorry, I couldn\'t process your request. Please try again.')
+      // Don't clear properties on conversation errors - preserve existing results
     } finally {
       setConversationLoading(false)
       setLoading(false)
@@ -176,6 +210,7 @@ export default function App() {
               onSubmit={handleConversationSubmit}
               loading={conversationLoading}
               disabled={loading}
+              error={conversationError}
             />
 
             {/* Advanced Filters & Controls */}
@@ -194,6 +229,7 @@ export default function App() {
               loading={loading}
               filters={filters}
               changedFilters={changedFilters}
+              error={error}
             />
           </div>
 

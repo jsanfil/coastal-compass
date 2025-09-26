@@ -23,8 +23,6 @@ Chronological notes of major milestones and decisions.
   - Consistent UI typography: Conversation and Advanced Filters headers match in size
 
 - What’s left to build:
-  - Enhanced UI to support both conversational and traditional filter controls
-  - User experience improvements (loading states, empty states, error states)
   - Testing (unit tests, integration tests for API endpoints)
 
 - Known issues:
@@ -47,4 +45,5 @@ Chronological notes of major milestones and decisions.
   - 2025-09-25: Filter change highlighting added - newly modified filters pulse with warm-coral background for 3 seconds
   - 2025-09-25: Location preservation fix in multi-turn conversations - location persists unless explicitly changed by user
   - 2025-09-25: UI typography consistency - Conversation and Advanced Filters headers now match in font size
+  - 2025-09-25: Enhanced UX improvements implemented - error states, welcome state, improved loading feedback, and retry mechanisms
   - Project now has core conversational features implemented - natural language search working end-to-end

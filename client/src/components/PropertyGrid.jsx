@@ -53,13 +53,42 @@ const formatFilterLabel = (key, value) => {
     return `${label}: ${value}`
 }
 
-export default function PropertyGrid({ properties, loading, filters, changedFilters = new Set() }) {
+export default function PropertyGrid({ properties, loading, filters, changedFilters = new Set(), error }) {
     // Check if there are any active filters to display
     const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
         if (key === 'location' && value === 'Aptos, CA') return false // Default location
         if (key === 'sort' && value === 'Price_High_Low') return false // Default sort
         return value !== '' && value !== null && value !== undefined
     })
+
+    // Error state
+    if (error) {
+        return (
+            <div className="text-center py-15 px-5">
+                <div className="text-6xl mb-5">⚠️</div>
+                <div className="text-blue-teal text-lg mb-2">Search Error</div>
+                <div className="text-gray-600 text-sm mb-4">{error}</div>
+                <div className="flex gap-3 justify-center">
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="bg-blue-teal text-white px-4 py-2 rounded-lg text-sm hover:bg-warm-coral transition-colors"
+                    >
+                        Reload Page
+                    </button>
+                    <button
+                        onClick={() => {
+                            // Trigger a new search with current filters
+                            const event = new CustomEvent('retrySearch')
+                            window.dispatchEvent(event)
+                        }}
+                        className="bg-sage-green text-blue-teal px-4 py-2 rounded-lg text-sm border border-teal-border hover:bg-sage-green/80 transition-colors"
+                    >
+                        Retry Search
+                    </button>
+                </div>
+            </div>
+        )
+    }
 
     if (loading) {
         return (

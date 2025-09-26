@@ -8,7 +8,7 @@ const SUGGESTIONS = [
     "Luxury estates"
 ]
 
-export default function ConversationInterface({ conversation, onSubmit, loading, disabled }) {
+export default function ConversationInterface({ conversation, onSubmit, loading, disabled, error }) {
     const [input, setInput] = useState('')
     const [showSuggestions, setShowSuggestions] = useState(false)
     const scrollRef = useRef(null)
@@ -57,6 +57,34 @@ export default function ConversationInterface({ conversation, onSubmit, loading,
                 </div>
             )}
 
+            {/* Welcome State - when no conversation yet */}
+            {conversation.length === 0 && !error && (
+                <div className="p-4 border-b border-teal-border/30 bg-sage-green/5">
+                    <div className="text-center">
+                        <div className="text-3xl mb-3">🏠</div>
+                        <h3 className="font-medium text-blue-teal mb-2">Welcome to Coastal Compass!</h3>
+                        <p className="text-sm text-gray-600 mb-3">
+                            Tell me what kind of property you're looking for. I can help you find homes using natural language.
+                        </p>
+                        <div className="text-xs text-gray-500">
+                            Try: "Show me 3 bedroom homes under $2M" or "Beach properties in Aptos"
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Error Display */}
+            {error && (
+                <div className="p-4 border-b border-gray-200 bg-gray-50">
+                    <div className="flex items-start gap-3">
+                        <div className="text-gray-400 text-lg">💭</div>
+                        <div className="flex-1">
+                            <div className="text-gray-700 text-sm">{error}</div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Input Area */}
             <div className="p-4">
                 <form onSubmit={handleSubmit} className="flex gap-3">
@@ -100,7 +128,7 @@ export default function ConversationInterface({ conversation, onSubmit, loading,
                         {loading ? (
                             <div className="flex items-center gap-2">
                                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                                Searching...
+                                <span className="text-xs">Understanding...</span>
                             </div>
                         ) : (
                             'Search'
