@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import ConversationBar from './components/ConversationBar'
+import ConversationInterface from './components/ConversationInterface'
 import CollapsibleFilterPanel from './components/CollapsibleFilterPanel'
 import PropertyGrid from './components/PropertyGrid'
 
@@ -9,6 +9,7 @@ export default function App() {
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(false)
   const [conversationLoading, setConversationLoading] = useState(false)
+  const [conversation, setConversation] = useState([]) // Array of {role, content, timestamp, filters?}
   const [filters, setFilters] = useState({
     location: 'Aptos, CA',
     minPrice: '',
@@ -48,7 +49,21 @@ export default function App() {
   async function handleConversationSubmit(prompt) {
     setConversationLoading(true)
     try {
-      // First, parse the prompt using LLM
+      // Add user message to conversation history
+      const userMessage = {
+        role: 'user',
+        content: prompt,
+        timestamp: new Date().toISOString()
+      }
+      setConversation(prev => [...prev, userMessage])
+
+      // Prepare conversation history for LLM (exclude timestamps)
+      const historyForLLM = conversation.map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }))
+
+      // First, parse the prompt using LLM with conversation context
       const parseResponse = await fetch(`${API}/api/parse-prompt`, {
         method: 'POST',
         headers: {
@@ -56,7 +71,8 @@ export default function App() {
         },
         body: JSON.stringify({
           prompt,
-          currentFilters: filters
+          currentFilters: filters,
+          history: historyForLLM
         })
       })
 
@@ -66,6 +82,15 @@ export default function App() {
 
       const parseData = await parseResponse.json()
       console.log('Parsed filters:', parseData)
+
+      // Add assistant response to conversation history
+      const assistantMessage = {
+        role: 'assistant',
+        content: parseData.message || 'Search updated based on your request.',
+        timestamp: new Date().toISOString(),
+        filters: parseData.filters
+      }
+      setConversation(prev => [...prev, assistantMessage])
 
       // Update filters with parsed results
       const newFilters = { ...filters, ...parseData.filters }
@@ -121,8 +146,9 @@ export default function App() {
 
           {/* Left Sidebar - Filters and Conversation */}
           <div className="lg:col-span-1 space-y-4 overflow-y-auto">
-            {/* Conversation Input */}
-            <ConversationBar
+            {/* Conversation Interface */}
+            <ConversationInterface
+              conversation={conversation}
               onSubmit={handleConversationSubmit}
               loading={conversationLoading}
               disabled={loading}

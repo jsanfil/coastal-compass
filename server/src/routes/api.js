@@ -59,7 +59,7 @@ router.get("/search", async (req, res) => {
 
 /**
  * POST /api/parse-prompt
- * Parse natural language prompt into filter criteria using LLM
+ * Parse natural language prompt into filter criteria using LLM with conversation context
  */
 router.post("/parse-prompt", express.json(), async (req, res) => {
     try {
@@ -69,19 +69,19 @@ router.post("/parse-prompt", express.json(), async (req, res) => {
         }
 
         // Validate request body
-        const { prompt, currentFilters } = parsePromptRequestSchema.parse(req.body);
+        const { prompt, currentFilters, history } = parsePromptRequestSchema.parse(req.body);
 
-        console.log('Parse prompt request:', { prompt, currentFilters });
+        console.log('Parse prompt request:', { prompt, currentFilters, history });
 
-        // Parse prompt using LLM
-        const result = await llmService.parsePromptToFilters(prompt, currentFilters);
+        // Parse prompt using LLM with conversation history
+        const result = await llmService.parsePromptToFilters(prompt, currentFilters, history);
 
         // Validate the parsed filters against our schema
         const validatedFilters = filterSchema.parse(result.filters);
 
         res.json({
             filters: validatedFilters,
-            explanation: result.explanation
+            message: result.message
         });
     } catch (error) {
         console.error('Parse prompt endpoint error:', error);

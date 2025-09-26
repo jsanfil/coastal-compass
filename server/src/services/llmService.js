@@ -15,15 +15,24 @@ export class LLMService {
     }
 
     /**
-     * Parse natural language prompt into structured filter criteria
+     * Parse natural language prompt into structured filter criteria with conversation context
      * @param {string} prompt - Natural language search query
      * @param {Object} currentFilters - Existing filter state for refinement
-     * @returns {Promise<Object>} Parsed filters and explanation
+     * @param {Array} history - Previous conversation messages [{role, content}, ...]
+     * @returns {Promise<Object>} Parsed filters and assistant message
      */
-    async parsePromptToFilters(prompt, currentFilters = {}) {
+    async parsePromptToFilters(prompt, currentFilters = {}, history = []) {
         try {
             const systemPrompt = this._buildSystemPrompt(currentFilters);
-            const userPrompt = `Parse this real estate search query: "${prompt}"`;
+            const messages = [{ role: "system", content: systemPrompt }];
+
+            // Add conversation history
+            history.forEach(msg => {
+                messages.push({ role: msg.role, content: msg.content });
+            });
+
+            // Add current user prompt
+            messages.push({ role: "user", content: `Parse this real estate search query: "${prompt}"` });
 
             const response = await fetch(`${this.baseUrl}/chat/completions`, {
                 method: "POST",
@@ -35,10 +44,7 @@ export class LLMService {
                 },
                 body: JSON.stringify({
                     model: this.model,
-                    messages: [
-                        { role: "system", content: systemPrompt },
-                        { role: "user", content: userPrompt }
-                    ],
+                    messages: messages,
                     temperature: 0.1, // Low temperature for consistent parsing
                     max_tokens: 1000
                 })
@@ -78,7 +84,7 @@ export class LLMService {
             ? `\nCurrent active filters: ${JSON.stringify(currentFilters, null, 2)}`
             : "";
 
-        return `You are a real estate search assistant. Parse natural language queries into structured filter criteria for property searches.
+        return `You are a conversational real estate search assistant. Help users find properties through natural dialogue.
 
 Available filter fields:
 - location: City, neighborhood, or address (required, default: "Aptos, CA")
@@ -97,7 +103,8 @@ Instructions:
 3. For price ranges, convert to minPrice/maxPrice (e.g., "under $1M" → maxPrice: "1000000")
 4. For bedroom/bathroom counts, use bedsMin/bathsMin for minimums
 5. If refining existing filters, merge with current state appropriately
-6. Return valid JSON with "filters" object and optional "explanation" string${currentFiltersText}
+6. Provide a natural, conversational response acknowledging the user's request
+7. Return valid JSON with "filters" object and "message" string for user feedback${currentFiltersText}
 
 Response format:
 {
@@ -107,7 +114,7 @@ Response format:
     "maxPrice": "1000000",
     "bedsMin": "3"
   },
-  "explanation": "Searching for 3+ bedroom homes in San Diego priced $500K-$1M"
+  "message": "Got it! Showing 3+ bedroom homes in San Diego priced between $500K and $1M."
 }`;
     }
 
@@ -139,7 +146,7 @@ Response format:
 
             return {
                 filters,
-                explanation: parsed.explanation || null
+                message: parsed.message || null
             };
         } catch (error) {
             console.error('Failed to parse LLM response:', content);

@@ -23,13 +23,17 @@ export const filterSchema = z.object({
 // Schema for parsing natural language prompts into filters
 export const parsePromptRequestSchema = z.object({
     prompt: z.string().min(1, "Prompt cannot be empty"),
-    currentFilters: filterSchema.optional() // Allow refining existing filters
+    currentFilters: filterSchema.optional(), // Allow refining existing filters
+    history: z.array(z.object({
+        role: z.string(),
+        content: z.string()
+    })).optional() // Conversation history for multi-turn dialogue
 });
 
 // Schema for the response from LLM parsing
 export const parsePromptResponseSchema = z.object({
     filters: filterSchema,
-    explanation: z.string().optional() // Optional explanation of what was parsed
+    message: z.string().optional() // Natural language response for user feedback
 });
 
 // Note: For TypeScript usage later, these would be:

@@ -2,21 +2,25 @@
 Tracks the current state of development.
 
 - Current work focus:
-  - Initializing Memory Bank with current project state
-  - Establishing baseline documentation for conversational real estate search app
-  - Reviewing existing codebase to document current implementation status
+  - Conversational search interface implementation
+  - LLM integration for natural language processing
+  - Multi-turn dialogue support for filter refinement
+  - Memory Bank maintenance and documentation updates
 
 - Recent changes:
-  - Project structure established with client/server separation
-  - Basic Zillow API integration implemented via RapidAPI proxy
-  - React frontend with filter controls and property display components
-  - Express server handling search requests and API proxying
+  - Server-side LLM support implemented using OpenRouter API with Claude-3-Haiku
+  - LLMService class added for parsing natural language prompts into structured filters
+  - API endpoints added: /api/parse-prompt for prompt parsing, /api/models for model info
+  - Client-side ConversationBar component implemented for natural language input
+  - Conversational search flow: prompt → LLM parsing → filter application → property search
+  - Active filters display implemented with square sage-green styling positioned above results count
+  - ActiveFiltersBar component removed as unused (functionality moved inline to PropertyGrid)
+  - Code cleanup: removed unused imports and handler functions from App.jsx
+  - Port configuration aligned (server running on 3001, client proxy configured correctly)
 
 - Next steps:
-  - Implement conversational search interface with LLM integration
-  - Add multi-turn dialogue support for filter refinement
-  - Enhance UI to show active filter state and support both natural language and traditional controls
-  - Resolve server port configuration inconsistency (client expects 3001, server defaults to 4000)
+  - Enhance UI to support both conversational and traditional filter controls
+  - Add user experience improvements (loading states, empty states, error states)
 
 - Active decisions & considerations:
   - Using RapidAPI for Zillow API access to avoid direct scraping
