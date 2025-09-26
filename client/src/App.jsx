@@ -1,13 +1,14 @@
 import { useState } from 'react'
-import FilterPanel from './components/FilterPanel'
+import ConversationBar from './components/ConversationBar'
+import CollapsibleFilterPanel from './components/CollapsibleFilterPanel'
 import PropertyGrid from './components/PropertyGrid'
-
 
 const API = 'http://localhost:3001'
 
 export default function App() {
   const [properties, setProperties] = useState([])
   const [loading, setLoading] = useState(false)
+  const [conversationLoading, setConversationLoading] = useState(false)
   const [filters, setFilters] = useState({
     location: 'Aptos, CA',
     minPrice: '',
@@ -20,6 +21,7 @@ export default function App() {
     sort: 'Price_High_Low'
   })
 
+  // Search using traditional filters
   async function search() {
     setLoading(true)
     try {
@@ -42,17 +44,68 @@ export default function App() {
     }
   }
 
+  // Handle conversation input - parse natural language and search
+  async function handleConversationSubmit(prompt) {
+    setConversationLoading(true)
+    try {
+      // First, parse the prompt using LLM
+      const parseResponse = await fetch(`${API}/api/parse-prompt`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          prompt,
+          currentFilters: filters
+        })
+      })
+
+      if (!parseResponse.ok) {
+        throw new Error('Failed to parse prompt')
+      }
+
+      const parseData = await parseResponse.json()
+      console.log('Parsed filters:', parseData)
+
+      // Update filters with parsed results
+      const newFilters = { ...filters, ...parseData.filters }
+      setFilters(newFilters)
+
+      // Now search with the parsed filters
+      setLoading(true)
+      const searchParams = new URLSearchParams()
+      Object.entries(newFilters).forEach(([key, value]) => {
+        if (value !== '' && value !== null && value !== undefined) {
+          searchParams.set(key, value)
+        }
+      })
+
+      const searchResponse = await fetch(`${API}/api/search?${searchParams.toString()}`)
+      const searchData = await searchResponse.json()
+      setProperties(searchData.items || [])
+
+    } catch (error) {
+      console.error('Conversation search failed:', error)
+      setProperties([])
+    } finally {
+      setConversationLoading(false)
+      setLoading(false)
+    }
+  }
+
+
+
   return (
-    <div className="min-h-screen bg-warm-beige font-['Poppins'] p-5">
+    <div className="h-screen bg-warm-beige font-['Poppins'] overflow-hidden">
       {/* Google Fonts Link */}
       <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
       />
 
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto p-5 h-full flex flex-col">
 
-        <header className="flex items-center gap-3 mb-5">
+        <header className="flex items-center gap-3 mb-6 flex-shrink-0">
           <img
             src="/images/coastal-compass-logo.svg"
             alt="Coastal Compass logo"
@@ -63,18 +116,38 @@ export default function App() {
           </h1>
         </header>
 
-        <FilterPanel
-          filters={filters}
-          onFiltersChange={setFilters}
-          onSearch={search}
-          loading={loading}
-        />
+        {/* Main Content Grid - Left: Filters/Conversation, Right: Properties */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 overflow-hidden">
 
-        <PropertyGrid
-          properties={properties}
-          loading={loading}
-          filters={filters}
-        />
+          {/* Left Sidebar - Filters and Conversation */}
+          <div className="lg:col-span-1 space-y-4 overflow-y-auto">
+            {/* Conversation Input */}
+            <ConversationBar
+              onSubmit={handleConversationSubmit}
+              loading={conversationLoading}
+              disabled={loading}
+            />
+
+            {/* Advanced Filters & Controls */}
+            <CollapsibleFilterPanel
+              filters={filters}
+              onFiltersChange={setFilters}
+              onSearch={search}
+              loading={loading}
+            />
+          </div>
+
+          {/* Right Side - Property Results */}
+          <div className="lg:col-span-2 overflow-y-auto">
+            <PropertyGrid
+              properties={properties}
+              loading={loading}
+              filters={filters}
+            />
+          </div>
+
+        </div>
+
       </div>
     </div>
   )

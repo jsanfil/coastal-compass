@@ -54,6 +54,13 @@ const formatFilterLabel = (key, value) => {
 }
 
 export default function PropertyGrid({ properties, loading, filters }) {
+    // Check if there are any active filters to display
+    const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
+        if (key === 'location' && value === 'Aptos, CA') return false // Default location
+        if (key === 'sort' && value === 'Price_High_Low') return false // Default sort
+        return value !== '' && value !== null && value !== undefined
+    })
+
     if (loading) {
         return (
             <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4 md:gap-6 py-5">
@@ -91,26 +98,32 @@ export default function PropertyGrid({ properties, loading, filters }) {
     return (
         <div>
             {/* Active Filters */}
-            <div className="mb-5">
-                <h3 className="text-blue-teal text-base font-medium mb-2">
-                    Active Filters:
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                    {Object.entries(filters).map(([key, value]) => {
-                        const formatted = formatFilterLabel(key, value)
-                        return formatted ? (
-                            <span key={key} className="bg-sage-green text-blue-teal px-2 py-1 rounded text-xs">
-                                {formatted}
-                            </span>
-                        ) : null
-                    })}
+            {hasActiveFilters && (
+                <div className="mb-4">
+                    <h2 className="text-blue-teal text-lg font-medium mb-2 tracking-tight">
+                        Active Filters:
+                    </h2>
+                    <div className="flex flex-wrap gap-2">
+                        {Object.entries(filters).map(([key, value]) => {
+                            const formatted = formatFilterLabel(key, value)
+                            return formatted ? (
+                                <span
+                                    key={key}
+                                    className="bg-sage-green text-blue-teal px-2 py-1 rounded text-xs"
+                                >
+                                    {formatted}
+                                </span>
+                            ) : null
+                        })}
+                    </div>
                 </div>
-            </div>
+            )}
 
             {/* Results Count */}
-            <div className="mb-5 text-blue-teal text-base font-medium">
-                Found {properties.length} propert{properties.length === 1 ? 'y' : 'ies'}
-            </div>
+            <h2 className="mb-5 text-blue-teal text-lg font-medium tracking-tight">
+                Found {properties.length} propert
+                {properties.length === 1 ? 'y' : 'ies'}
+            </h2>
 
             {/* Property Grid */}
             <div className="grid grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-4 md:gap-6 py-5">
