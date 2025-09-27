@@ -68,3 +68,11 @@ Chronological notes of major milestones and decisions.
   - 2025-09-27: Client test suite fixed and enhanced - resolved PropertyCard square footage test, FilterPanel input handling, ConversationInterface data structure and Enter key support, App test expectations
   - 2025-09-27: Automated regression testing system implemented - baseline comparison, regression detection script, CI/CD integration, comprehensive documentation
   - Project now has core conversational features implemented - natural language search working end-to-end with robust test coverage and regression protection
+  - Keyword filtering fully implemented with 14 whitelisted keywords (pool, waterfront, singleStory, etc.) and controlled vocabulary mapping
+  - API-first architecture refactor completed - entire system now uses Zillow API property type values directly (Houses, Townhomes, Multi-family, Apartments, Manufactured, Condos, LotsLand)
+  - Property type corrections applied - removed incorrect rental-only property type (Apartments_Condos-Co-ops) and updated all mappings to use correct Zillow API values
+  - Keyword preservation in multi-turn conversations fixed - keywords now persist across conversation turns when not explicitly overridden
+  - Schema enhancements - filter schema now handles keywords arrays and comma-separated strings with automatic transformation
+  - UI improvements - keyword checkboxes added to FilterPanel, individual keyword tags displayed in PropertyGrid active filters
+  - LLM prompt optimizations - updated to use exact API values and include keyword preservation instructions
+- Fixed LLM property type recognition issue - added explicit instruction requiring home_type to be set when users mention property types like "homes", "houses", etc., resolving parsing failures where "homes" wasn't mapped to "Houses"

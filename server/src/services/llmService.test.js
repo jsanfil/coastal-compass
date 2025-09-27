@@ -123,7 +123,7 @@ describe('LLMService', () => {
 
             expect(result.filters.location).toBe('La Jolla, CA') // Preserved
             expect(result.filters.bedsMin).toBe('4') // Updated
-            expect(result.filters.minPrice).toBeUndefined() // Not in response, so not included
+            expect(result.filters.minPrice).toBe('500000') // Preserved from current filters
         })
 
         it('should handle empty currentFilters and history', async () => {

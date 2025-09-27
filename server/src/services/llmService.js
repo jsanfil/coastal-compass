@@ -119,13 +119,13 @@ Available filter fields:
 - minPrice: Minimum price (string, optional)
 - maxPrice: Maximum price (string, optional)
 - home_type: Property type - use these exact Zillow API values:
-  * "Houses" (single family homes)
-  * "Townhomes"
-  * "Multi-family" (duplexes, triplexes, etc.)
-  * "Apartments"
-  * "Manufactured" (manufactured/mobile homes)
-  * "Condos"
-  * "LotsLand" (lots and land)
+  * "Houses" (single family homes, houses, homes)
+  * "Townhomes" (townhouses, town homes)
+  * "Multi-family" (duplexes, triplexes, multi-family homes)
+  * "Apartments" (apartments, rental units)
+  * "Manufactured" (manufactured homes, mobile homes)
+  * "Condos" (condominiums, condos)
+  * "LotsLand" (lots, land, vacant land)
   (optional - leave empty if not specified)
 - bedsMin: Minimum bedrooms (string, optional)
 - bathsMin: Minimum bathrooms (string, optional)
@@ -139,14 +139,15 @@ Instructions:
 2. Handle special commands:
    - If user says "clear all filters", "reset filters", "clear filters", or similar → Return ALL filter fields with empty strings ("") except preserve location
    - Otherwise, only include filters that are explicitly mentioned or clearly implied
-3. For price ranges, convert to minPrice/maxPrice (e.g., "under $1M" → maxPrice: "1000000")
-4. For bedroom/bathroom counts, use bedsMin/bathsMin for minimums
-5. For keywords: Include only keywords present in the provided whitelist. Do not invent tokens. Drop anything not in the whitelist.
-6. IMPORTANT: Location is always required. If no new location is mentioned in this turn, preserve the current location from context. Never remove or reset location to default unless user explicitly requests a new location.
-7. IMPORTANT: Keywords should be preserved across conversation turns. Only modify keywords if the user explicitly mentions new ones or wants to clear them. If no keywords are mentioned in this query, keep the existing keywords from current filters.
-8. If refining existing filters, merge with current state appropriately - preserve values that aren't being changed
-9. Provide a natural, conversational response acknowledging the user's request
-10. Return valid JSON with "filters" object and "message" string for user feedback${currentFiltersText}
+3. For property types: ALWAYS set home_type when the user mentions property types like "homes", "houses", "condos", "apartments", "townhomes", etc. Map them to the exact API values listed above.
+4. For price ranges, convert to minPrice/maxPrice (e.g., "under $1M" → maxPrice: "1000000")
+5. For bedroom/bathroom counts, use bedsMin/bathsMin for minimums
+6. For keywords: Include only keywords present in the provided whitelist. Do not invent tokens. Drop anything not in the whitelist.
+7. IMPORTANT: Location is always required. If no new location is mentioned in this turn, preserve the current location from context. Never remove or reset location to default unless user explicitly requests a new location.
+8. IMPORTANT: Keywords should be preserved across conversation turns. Only include keywords in your response if the user explicitly mentions new keywords or wants to clear them (e.g., "no pool", "remove ocean view"). If no keywords are mentioned in this query, do NOT include the keywords field in your response at all - this preserves the existing keywords.
+9. If refining existing filters, merge with current state appropriately - preserve values that aren't being changed
+10. Provide a natural, conversational response acknowledging the user's request
+11. Return valid JSON with "filters" object and "message" string for user feedback${currentFiltersText}
 
 Response format:
 {
@@ -183,13 +184,21 @@ Response format:
                 throw new Error("Invalid response structure: missing filters object");
             }
 
-            // Preserve existing location if not explicitly overridden, otherwise use default
-            // Also preserve existing keywords if not explicitly overridden
-            const filters = {
-                location: parsed.filters.location || currentFilters.location || "Aptos, CA",
-                keywords: parsed.filters.keywords !== undefined ? parsed.filters.keywords : (currentFilters.keywords || []),
-                ...parsed.filters
-            };
+            // Start with current filters as base, preserving all existing state
+            const filters = { ...currentFilters };
+
+            // Override only fields that are explicitly present in LLM response
+            // This includes empty strings/nulls which should clear the filter
+            Object.keys(parsed.filters).forEach(key => {
+                if (parsed.filters[key] !== undefined) {
+                    filters[key] = parsed.filters[key];
+                }
+            });
+
+            // Ensure location always has a default value
+            if (!filters.location) {
+                filters.location = "Aptos, CA";
+            }
 
             return {
                 filters,

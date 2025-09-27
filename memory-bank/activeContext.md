@@ -2,9 +2,8 @@
 Tracks the current state of development.
 
 - Current work focus:
-  - Conversational search interface implementation
-  - LLM integration for natural language processing
-  - Multi-turn dialogue support for filter refinement
+  - Keyword filtering implementation and property type corrections
+  - API-first architecture using Zillow API values directly
   - Memory Bank maintenance and documentation updates
 
 - Recent changes:
@@ -31,6 +30,16 @@ Tracks the current state of development.
   - Location preservation fix: location persists in multi-turn conversations unless explicitly changed
   - UI typography consistency: Conversation and Advanced Filters headers now match in font size
 - Fixed filter clearing bug: Added direct detection for clearing commands ("clear all filters", "reset filters", etc.) in LLM service to return complete filter objects with empty strings for cleared fields, ensuring UI and search results update properly when clearing filters
+- Keyword filtering implementation completed: Added 14 whitelisted keywords (pool, waterfront, singleStory, etc.) with controlled vocabulary mapping
+- API-first architecture refactor: Updated entire system to use Zillow API property type values directly (Houses, Townhomes, Multi-family, Apartments, Manufactured, Condos, LotsLand) instead of complex mappings
+- Property type corrections: Removed incorrect rental-only property type (Apartments_Condos-Co-ops) and updated all mappings to use correct Zillow API values
+- Keyword preservation in multi-turn conversations: Fixed keywords disappearing across conversation turns by preserving existing keywords when not explicitly overridden
+- Schema updates: Extended filter schema to handle keywords arrays and comma-separated strings, with automatic transformation
+- UI enhancements: Added keyword checkboxes in FilterPanel, individual keyword tags in PropertyGrid active filters display
+- LLM prompt improvements: Updated system prompt to use exact API values and include keyword preservation instructions
+- Fixed LLM property type recognition: Added explicit instruction to ALWAYS set home_type when users mention property types like "homes", "houses", etc., resolving issue where "homes" wasn't being parsed as home_type: "Houses"
+- Implemented generic filter state preservation: Replaced hardcoded field-by-field preservation with a generic solution that preserves all existing filter state unless explicitly overridden by LLM response, ensuring proper multi-turn conversation behavior for all filter attributes
+- Fixed keyword preservation in multi-turn conversations: Updated system prompt to instruct LLM to only include keywords field when explicitly mentioned or cleared, preventing accidental keyword clearing during follow-up queries
 
 - Next steps:
   - Client-side testing (React components, integration tests)

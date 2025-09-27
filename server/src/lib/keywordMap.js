@@ -1,20 +1,8 @@
 // Keyword whitelist & mapping: user phrase -> canonical token
 export const KEYWORD_MAP = {
-    // Core features with strong support
+    // --- Core Features ---
     "pool": "pool",
     "swimming pool": "pool",
-
-    "waterfront": "waterfront",
-    "oceanfront": "waterfront",
-    "lakefront": "waterfront",
-
-    "single story": "singleStory",
-    "one story": "singleStory",
-    "ranch style": "singleStory",
-
-    "new construction": "newConstruction",
-    "brand new": "newConstruction",
-    "just built": "newConstruction",
 
     "garage": "garage",
     "two car garage": "garage",
@@ -34,9 +22,13 @@ export const KEYWORD_MAP = {
     "solar": "solar",
     "solar panels": "solar",
 
-    "view": "view",
-    "ocean view": "view",
-    "mountain view": "view",
+    "new construction": "newConstruction",
+    "brand new": "newConstruction",
+    "just built": "newConstruction",
+
+    "single story": "singleStory",
+    "one story": "singleStory",
+    "ranch style": "singleStory",
 
     "fixer": "fixer",
     "fixer-upper": "fixer",
@@ -46,7 +38,34 @@ export const KEYWORD_MAP = {
     "great room": "openFloorPlan",
 
     "garden": "garden",
-    "landscaped yard": "garden"
+    "landscaped yard": "garden",
+
+    // --- Views ---
+    "view": "view",                        // broad catch-all
+    "ocean view": "ocean view",
+    "mountain view": "mountain view",
+    "bay view": "bay view",
+    "lake view": "lake view",
+    "river view": "river view",
+    "city view": "city view",
+    "golf course view": "golf course view",
+    "park view": "park view",
+    "water view": "water view",
+    "canyon view": "canyon view",
+    "valley view": "valley view",
+    "harbor view": "harbor view",
+    "garden view": "garden view",
+
+    // --- Waterfronts ---
+    "waterfront": "waterfront",            // broad catch-all
+    "oceanfront": "oceanfront",
+    "beachfront": "beachfront",
+    "lakefront": "lakefront",
+    "riverfront": "riverfront",
+    "bayfront": "bayfront",
+    "canal front": "canal front",
+    "harbor front": "harbor front",
+    "lagoon front": "lagoon front"
 };
 
 /**
