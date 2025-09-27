@@ -8,7 +8,7 @@ const SUGGESTIONS = [
     "Luxury estates"
 ]
 
-export default function ConversationInterface({ conversation, onSubmit, loading, disabled, error }) {
+export default function ConversationInterface({ conversation, onSubmit, loading, disabled, error, onReset }) {
     const [input, setInput] = useState('')
     const [showSuggestions, setShowSuggestions] = useState(false)
     const scrollRef = useRef(null)
@@ -38,7 +38,16 @@ export default function ConversationInterface({ conversation, onSubmit, loading,
             {/* Conversation History */}
             {conversation.length > 0 && (
                 <div className="p-4 border-b border-teal-border/30">
-                    <h3 className="font-medium text-blue-teal mb-3">Conversation</h3>
+                    <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-medium text-blue-teal">Conversation</h3>
+                        <button
+                            onClick={onReset}
+                            className="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded hover:bg-gray-100"
+                            title="Reset conversation"
+                        >
+                            <span className="text-lg">🔄</span>
+                        </button>
+                    </div>
                     <div className="max-h-64 overflow-y-auto space-y-3" ref={scrollRef}>
                         {conversation.map((message, index) => (
                             <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>

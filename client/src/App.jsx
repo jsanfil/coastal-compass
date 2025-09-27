@@ -12,7 +12,7 @@ export default function App() {
   const [conversation, setConversation] = useState([]) // Array of {role, content, timestamp, filters?}
   const [error, setError] = useState(null)
   const [conversationError, setConversationError] = useState(null)
-  const [filters, setFilters] = useState({
+  const initialFilters = {
     location: 'Aptos, CA',
     minPrice: '',
     maxPrice: '',
@@ -22,8 +22,10 @@ export default function App() {
     sqftMin: '',
     sqftMax: '',
     sort: 'Price_High_Low'
-  })
-  const [previousFilters, setPreviousFilters] = useState(filters)
+  }
+
+  const [filters, setFilters] = useState(initialFilters)
+  const [previousFilters, setPreviousFilters] = useState(initialFilters)
   const [changedFilters, setChangedFilters] = useState(new Set())
 
   // Detect filter changes and highlight them
@@ -95,6 +97,19 @@ export default function App() {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Reset app to startup state
+  function handleReset() {
+    setProperties([])
+    setLoading(false)
+    setConversationLoading(false)
+    setConversation([])
+    setError(null)
+    setConversationError(null)
+    setFilters(initialFilters)
+    setPreviousFilters(initialFilters)
+    setChangedFilters(new Set())
   }
 
   // Handle conversation input - parse natural language and search
@@ -211,6 +226,7 @@ export default function App() {
               loading={conversationLoading}
               disabled={loading}
               error={conversationError}
+              onReset={handleReset}
             />
 
             {/* Advanced Filters & Controls */}
