@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { getAllCanonicalTokens } from "../lib/keywordMap.js";
 
 /**
  * Service for LLM-powered natural language processing using OpenRouter
@@ -38,7 +39,8 @@ export class LLMService {
                     bathsMin: "",
                     sqftMin: "",
                     sqftMax: "",
-                    sort: "Price_High_Low"
+                    sort: "Price_High_Low",
+                    keywords: []
                 },
                 message: preserveLocation
                     ? `Okay, I've cleared all filters except for the location, which is set to ${currentFilters.location || "Aptos, CA"}.`
@@ -108,18 +110,29 @@ export class LLMService {
             ? `\nCurrent active filters: ${JSON.stringify(currentFilters, null, 2)}`
             : "";
 
+        const keywordWhitelist = getAllCanonicalTokens().join(", ");
+
         return `You are a conversational real estate search assistant. Help users find properties through natural dialogue.
 
 Available filter fields:
 - location: City, neighborhood, or address (required, default: "Aptos, CA")
 - minPrice: Minimum price (string, optional)
 - maxPrice: Maximum price (string, optional)
-- home_type: Property type - "Houses", "Condos", "Townhomes", "Apartments", etc. (optional)
+- home_type: Property type - use these exact Zillow API values:
+  * "Houses" (single family homes)
+  * "Townhomes"
+  * "Multi-family" (duplexes, triplexes, etc.)
+  * "Apartments"
+  * "Manufactured" (manufactured/mobile homes)
+  * "Condos"
+  * "LotsLand" (lots and land)
+  (optional - leave empty if not specified)
 - bedsMin: Minimum bedrooms (string, optional)
 - bathsMin: Minimum bathrooms (string, optional)
 - sqftMin: Minimum square footage (string, optional)
 - sqftMax: Maximum square footage (string, optional)
 - sort: Sort order - "Price_High_Low", "Price_Low_High", "Newest", "Oldest", "Sqft_High_Low", "Sqft_Low_High" (default: "Price_High_Low")
+- keywords: Array of canonical tokens from this whitelist: ${keywordWhitelist}
 
 Instructions:
 1. Extract relevant criteria from the user's natural language query
@@ -128,20 +141,24 @@ Instructions:
    - Otherwise, only include filters that are explicitly mentioned or clearly implied
 3. For price ranges, convert to minPrice/maxPrice (e.g., "under $1M" → maxPrice: "1000000")
 4. For bedroom/bathroom counts, use bedsMin/bathsMin for minimums
-5. IMPORTANT: Location is always required. If no new location is mentioned in this turn, preserve the current location from context. Never remove or reset location to default unless user explicitly requests a new location.
-6. If refining existing filters, merge with current state appropriately
-7. Provide a natural, conversational response acknowledging the user's request
-8. Return valid JSON with "filters" object and "message" string for user feedback${currentFiltersText}
+5. For keywords: Include only keywords present in the provided whitelist. Do not invent tokens. Drop anything not in the whitelist.
+6. IMPORTANT: Location is always required. If no new location is mentioned in this turn, preserve the current location from context. Never remove or reset location to default unless user explicitly requests a new location.
+7. IMPORTANT: Keywords should be preserved across conversation turns. Only modify keywords if the user explicitly mentions new ones or wants to clear them. If no keywords are mentioned in this query, keep the existing keywords from current filters.
+8. If refining existing filters, merge with current state appropriately - preserve values that aren't being changed
+9. Provide a natural, conversational response acknowledging the user's request
+10. Return valid JSON with "filters" object and "message" string for user feedback${currentFiltersText}
 
 Response format:
 {
   "filters": {
     "location": "San Diego, CA",
+    "home_type": "Houses",
     "minPrice": "500000",
     "maxPrice": "1000000",
-    "bedsMin": "3"
+    "bedsMin": "3",
+    "keywords": ["pool", "waterfront"]
   },
-  "message": "Got it! Showing 3+ bedroom homes in San Diego priced between $500K and $1M."
+  "message": "Got it! Showing 3+ bedroom homes in San Diego priced between $500K and $1M with pools and waterfront views."
 }`;
     }
 
@@ -167,8 +184,10 @@ Response format:
             }
 
             // Preserve existing location if not explicitly overridden, otherwise use default
+            // Also preserve existing keywords if not explicitly overridden
             const filters = {
                 location: parsed.filters.location || currentFilters.location || "Aptos, CA",
+                keywords: parsed.filters.keywords !== undefined ? parsed.filters.keywords : (currentFilters.keywords || []),
                 ...parsed.filters
             };
 

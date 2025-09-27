@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { getAllCanonicalTokens } from '../lib/keywordMap.js';
 
 // Shared filter schema used for validation and type safety
 export const filterSchema = z.object({
@@ -21,7 +22,22 @@ export const filterSchema = z.object({
         "Bedrooms",
         "Bathrooms",
         "Lot_Size"
-    ]).default("Price_High_Low")
+    ]).default("Price_High_Low"),
+    keywords: z.union([
+        z.array(z.string()),
+        z.string()
+    ]).transform((val) => {
+        if (Array.isArray(val)) {
+            return val;
+        }
+        if (typeof val === 'string' && val.trim() === '') {
+            return [];
+        }
+        if (typeof val === 'string') {
+            return val.split(',').map(s => s.trim()).filter(s => s.length > 0);
+        }
+        return [];
+    }).default([])
 });
 
 // Schema for parsing natural language prompts into filters

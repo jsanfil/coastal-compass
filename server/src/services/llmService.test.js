@@ -83,7 +83,8 @@ describe('LLMService', () => {
                 bathsMin: '',
                 sqftMin: '',
                 sqftMax: '',
-                sort: 'Price_High_Low'
+                sort: 'Price_High_Low',
+                keywords: []
             })
             expect(result.message).toContain('cleared all filters')
         })

@@ -1,13 +1,34 @@
 import { useState } from 'react'
 
+// Keyword mapping for display
+const KEYWORD_DISPLAY_MAP = {
+    pool: "Pool",
+    waterfront: "Waterfront",
+    singleStory: "Single Story",
+    newConstruction: "New Construction",
+    garage: "Garage",
+    fireplace: "Fireplace",
+    basement: "Basement",
+    adu: "ADU/Guest House",
+    guestHouse: "Guest House",
+    solar: "Solar Panels",
+    view: "View",
+    fixer: "Fixer-Upper",
+    openFloorPlan: "Open Floor Plan",
+    garden: "Garden/Landscaped"
+};
+
+const AVAILABLE_KEYWORDS = Object.keys(KEYWORD_DISPLAY_MAP);
+
 const PROPERTY_TYPES = [
     { value: '', label: 'Any Type' },
-    { value: 'Houses', label: 'Houses' },
+    { value: 'Houses', label: 'Single Family Homes' },
     { value: 'Townhomes', label: 'Townhomes' },
-    { value: 'Apartments_Condos_Co-ops', label: 'Apartments/Condos/Co-ops' },
-    { value: 'Multi-family', label: 'Multi-family' },
-    { value: 'LotsLand', label: 'Lots/Land' },
-    { value: 'Manufactured', label: 'Manufactured' }
+    { value: 'Multi-family', label: 'Multi-Family' },
+    { value: 'Apartments', label: 'Apartments' },
+    { value: 'Manufactured', label: 'Manufactured Homes' },
+    { value: 'Condos', label: 'Condos' },
+    { value: 'LotsLand', label: 'Lots & Land' }
 ]
 
 const BEDROOM_OPTIONS = [
@@ -86,6 +107,14 @@ const SORT_OPTIONS = [
 export default function FilterPanel({ filters, onFiltersChange, onSearch, loading }) {
     const updateFilter = (key, value) => {
         onFiltersChange({ ...filters, [key]: value })
+    }
+
+    const updateKeywords = (keyword, checked) => {
+        const currentKeywords = filters.keywords || [];
+        const newKeywords = checked
+            ? [...currentKeywords, keyword]
+            : currentKeywords.filter(k => k !== keyword);
+        onFiltersChange({ ...filters, keywords: newKeywords });
     }
 
     return (
@@ -233,6 +262,24 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                             <option key={option.value} value={option.value}>{option.label}</option>
                         ))}
                     </select>
+                </div>
+            </div>
+
+            {/* Keywords Section */}
+            <div className="mb-4">
+                <div className="text-xs font-medium mb-2 text-blue-teal">Features & Amenities</div>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                    {AVAILABLE_KEYWORDS.map(keyword => (
+                        <label key={keyword} className="flex items-center text-sm">
+                            <input
+                                type="checkbox"
+                                checked={(filters.keywords || []).includes(keyword)}
+                                onChange={(e) => updateKeywords(keyword, e.target.checked)}
+                                className="mr-2 w-4 h-4 text-blue-teal bg-white border-teal-border rounded focus:ring-warm-coral focus:ring-2"
+                            />
+                            {KEYWORD_DISPLAY_MAP[keyword]}
+                        </label>
+                    ))}
                 </div>
             </div>
 

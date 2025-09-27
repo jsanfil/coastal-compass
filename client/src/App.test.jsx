@@ -105,7 +105,18 @@ describe('App', () => {
             },
             body: JSON.stringify({
                 prompt: 'Show me 3 bedroom homes in San Diego',
-                currentFilters: expect.any(Object),
+                currentFilters: {
+                    location: 'Aptos, CA',
+                    minPrice: '',
+                    maxPrice: '',
+                    home_type: '',
+                    bedsMin: '',
+                    bathsMin: '',
+                    sqftMin: '',
+                    sqftMax: '',
+                    sort: 'Price_High_Low',
+                    keywords: []
+                },
                 history: []
             })
         })

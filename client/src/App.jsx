@@ -21,7 +21,8 @@ export default function App() {
     bathsMin: '',
     sqftMin: '',
     sqftMax: '',
-    sort: 'Price_High_Low'
+    sort: 'Price_High_Low',
+    keywords: []
   }
 
   const [filters, setFilters] = useState(initialFilters)
@@ -80,7 +81,14 @@ export default function App() {
       const queryParams = new URLSearchParams()
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== '' && value !== null && value !== undefined) {
-          queryParams.set(key, value)
+          // Handle keywords array specially - join as comma-separated string
+          if (key === 'keywords' && Array.isArray(value)) {
+            if (value.length > 0) {
+              queryParams.set(key, value.join(','))
+            }
+          } else {
+            queryParams.set(key, value)
+          }
         }
       })
 
@@ -170,7 +178,14 @@ export default function App() {
       const searchParams = new URLSearchParams()
       Object.entries(newFilters).forEach(([key, value]) => {
         if (value !== '' && value !== null && value !== undefined) {
-          searchParams.set(key, value)
+          // Handle keywords array specially - join as comma-separated string
+          if (key === 'keywords' && Array.isArray(value)) {
+            if (value.length > 0) {
+              searchParams.set(key, value.join(','))
+            }
+          } else {
+            searchParams.set(key, value)
+          }
         }
       })
 

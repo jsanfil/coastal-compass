@@ -29,12 +29,13 @@ const formatFilterLabel = (key, value) => {
     }
     if (key === 'home_type') {
         const typeLabels = {
-            Houses: 'Houses',
+            Houses: 'Single Family Homes',
             Townhomes: 'Townhomes',
-            'Apartments_Condos_Co-ops': 'Apartments/Condos/Co-ops',
-            'Multi-family': 'Multi-family',
-            LotsLand: 'Lots/Land',
-            Manufactured: 'Manufactured'
+            'Multi-family': 'Multi-Family',
+            Apartments: 'Apartments',
+            Manufactured: 'Manufactured Homes',
+            Condos: 'Condos',
+            LotsLand: 'Lots & Land'
         }
         return `${label}: ${typeLabels[value] || value}`
     }
@@ -53,11 +54,30 @@ const formatFilterLabel = (key, value) => {
     return `${label}: ${value}`
 }
 
+// Keyword display mapping
+const KEYWORD_DISPLAY_MAP = {
+    pool: "Pool",
+    waterfront: "Waterfront",
+    singleStory: "Single Story",
+    newConstruction: "New Construction",
+    garage: "Garage",
+    fireplace: "Fireplace",
+    basement: "Basement",
+    adu: "ADU/Guest House",
+    guestHouse: "Guest House",
+    solar: "Solar Panels",
+    view: "View",
+    fixer: "Fixer-Upper",
+    openFloorPlan: "Open Floor Plan",
+    garden: "Garden/Landscaped"
+};
+
 export default function PropertyGrid({ properties, loading, filters, changedFilters = new Set(), error }) {
     // Check if there are any active filters to display
     const hasActiveFilters = Object.entries(filters).some(([key, value]) => {
         if (key === 'location' && value === 'Aptos, CA') return false // Default location
         if (key === 'sort' && value === 'Price_High_Low') return false // Default sort
+        if (key === 'keywords' && (!Array.isArray(value) || value.length === 0)) return false // Empty keywords array
         return value !== '' && value !== null && value !== undefined
     })
 
@@ -134,6 +154,19 @@ export default function PropertyGrid({ properties, loading, filters, changedFilt
                     </h2>
                     <div className="flex flex-wrap gap-2">
                         {Object.entries(filters).map(([key, value]) => {
+                            // Handle keywords separately - display each keyword as individual tag
+                            if (key === 'keywords' && Array.isArray(value) && value.length > 0) {
+                                return value.map(keyword => (
+                                    <span
+                                        key={`keyword-${keyword}`}
+                                        className={`bg-sage-green text-blue-teal px-2 py-1 rounded text-xs transition-all duration-300 ${changedFilters.has(key) ? 'animate-pulse bg-warm-coral text-white' : ''
+                                            }`}
+                                    >
+                                        {KEYWORD_DISPLAY_MAP[keyword] || keyword}
+                                    </span>
+                                ))
+                            }
+
                             const formatted = formatFilterLabel(key, value)
                             const isChanged = changedFilters.has(key)
                             return formatted ? (

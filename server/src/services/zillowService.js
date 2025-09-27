@@ -46,6 +46,7 @@ export class ZillowService {
             console.log('Zillow API Raw response:', data);
 
             const properties = this._normalizeResponse(data);
+
             console.log('Normalized properties:', properties);
 
             return properties;
@@ -101,6 +102,11 @@ export class ZillowService {
         if (filters.sort) {
             url.searchParams.set("sort", filters.sort);
         }
+
+        // Keywords filter
+        if (filters.keywords && filters.keywords.length > 0) {
+            url.searchParams.set("keywords", filters.keywords.join(","));
+        }
     }
 
     /**
@@ -146,5 +152,32 @@ export class ZillowService {
             return `https://www.zillow.com/homedetails/${item.zpid}_zpid/`;
         }
         return null;
+    }
+
+    /**
+     * Filter properties by property type (client-side filtering as fallback)
+     * @param {Array} properties - Array of property objects
+     * @param {string} targetType - Target property type from our filter
+     * @returns {Array} Filtered properties
+     */
+    _filterByPropertyType(properties, targetType) {
+        // Map our filter values to Zillow API property types
+        const typeMapping = {
+            'Houses': ['SINGLE_FAMILY'],
+            'Apartments_Condos_Co-ops': ['CONDO'],
+            'Townhomes': ['SINGLE_FAMILY'], // Townhomes often classified as SINGLE_FAMILY
+            'Multi-family': ['MULTI_FAMILY'],
+            'LotsLand': [], // No specific property type for land
+            'Manufactured': ['MANUFACTURED']
+        };
+
+        const allowedTypes = typeMapping[targetType] || [];
+        if (allowedTypes.length === 0) {
+            return properties; // Return all if no mapping or empty mapping
+        }
+
+        return properties.filter(property => {
+            return allowedTypes.includes(property.propertyType);
+        });
     }
 }

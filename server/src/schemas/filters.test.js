@@ -13,7 +13,8 @@ describe('Filter Schemas', () => {
                 bathsMin: '2',
                 sqftMin: '1500',
                 sqftMax: '3000',
-                sort: 'Price_High_Low'
+                sort: 'Price_High_Low',
+                keywords: []
             }
 
             const result = filterSchema.safeParse(validFilters)
