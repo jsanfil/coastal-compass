@@ -24,6 +24,7 @@ Tracks the current state of development.
   - Filter change highlighting: newly modified filters pulse with warm-coral background for 3 seconds
   - Location preservation fix: location persists in multi-turn conversations unless explicitly changed
   - UI typography consistency: Conversation and Advanced Filters headers now match in font size
+- Fixed filter clearing bug: Added direct detection for clearing commands ("clear all filters", "reset filters", etc.) in LLM service to return complete filter objects with empty strings for cleared fields, ensuring UI and search results update properly when clearing filters
 
 - Next steps:
   - Testing (unit tests, integration tests for API endpoints)

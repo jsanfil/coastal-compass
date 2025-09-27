@@ -23,6 +23,29 @@ export class LLMService {
      */
     async parsePromptToFilters(prompt, currentFilters = {}, history = []) {
         const currentFiltersCopy = { ...currentFilters }; // Preserve original for context
+
+        // Handle clearing commands directly
+        const lowerPrompt = prompt.toLowerCase().trim();
+        if (lowerPrompt.includes('clear all filters') || lowerPrompt.includes('reset filters') || lowerPrompt.includes('clear filters')) {
+            const preserveLocation = lowerPrompt.includes('except location');
+            return {
+                filters: {
+                    location: preserveLocation ? (currentFilters.location || "Aptos, CA") : "Aptos, CA",
+                    minPrice: "",
+                    maxPrice: "",
+                    home_type: "",
+                    bedsMin: "",
+                    bathsMin: "",
+                    sqftMin: "",
+                    sqftMax: "",
+                    sort: "Price_High_Low"
+                },
+                message: preserveLocation
+                    ? `Okay, I've cleared all filters except for the location, which is set to ${currentFilters.location || "Aptos, CA"}.`
+                    : "Okay, I've cleared all filters and reset to the default location."
+            };
+        }
+
         try {
             const systemPrompt = this._buildSystemPrompt(currentFilters);
             const messages = [{ role: "system", content: systemPrompt }];
@@ -100,7 +123,9 @@ Available filter fields:
 
 Instructions:
 1. Extract relevant criteria from the user's natural language query
-2. Only include filters that are explicitly mentioned or clearly implied
+2. Handle special commands:
+   - If user says "clear all filters", "reset filters", "clear filters", or similar → Return ALL filter fields with empty strings ("") except preserve location
+   - Otherwise, only include filters that are explicitly mentioned or clearly implied
 3. For price ranges, convert to minPrice/maxPrice (e.g., "under $1M" → maxPrice: "1000000")
 4. For bedroom/bathroom counts, use bedsMin/bathsMin for minimums
 5. IMPORTANT: Location is always required. If no new location is mentioned in this turn, preserve the current location from context. Never remove or reset location to default unless user explicitly requests a new location.

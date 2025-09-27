@@ -16,7 +16,11 @@ export const filterSchema = z.object({
         "Newest",
         "Oldest",
         "Sqft_High_Low",
-        "Sqft_Low_High"
+        "Sqft_Low_High",
+        "Square_Feet",
+        "Bedrooms",
+        "Bathrooms",
+        "Lot_Size"
     ]).default("Price_High_Low")
 });
 
