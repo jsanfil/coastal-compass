@@ -21,14 +21,14 @@ Architectural conventions and key technical decisions.
   - App.jsx (root): Manages global state (filters, properties, conversation, loading), orchestrates search and conversation
   - ConversationInterface.jsx: Integrated conversation history and input component
   - CollapsibleFilterPanel.jsx: Expandable wrapper for traditional filter controls
-  - FilterPanel.jsx: Child component for filter input controls with keyword checkboxes
+  - FilterPanel.jsx: Child component for filter input controls with keyword text input field
   - PropertyGrid.jsx: Child component for displaying search results with active filter highlighting (including keyword tags)
   - PropertyCard.jsx: Sub-component for individual property display
   - server/index.js: Route handlers (/api/search, /api/parse-prompt) that proxy to external APIs
   - server/src/lib/keywordMap.js: Controlled vocabulary mapping for keyword filtering
 
 - Critical implementation paths:
-  - Traditional search flow: User input → FilterPanel (with keyword checkboxes) → App state update → search() function → fetch to /api/search → server proxy → Zillow API → response normalization → PropertyGrid display (with keyword tags)
+  - Traditional search flow: User input → FilterPanel (with keyword text input field) → App state update → search() function → fetch to /api/search → server proxy → Zillow API → response normalization → PropertyGrid display (with keyword tags)
   - Conversational search flow: User input → ConversationInterface → handleConversationSubmit → fetch to /api/parse-prompt → LLM parsing with keyword whitelist → filter update → search flow → PropertyGrid display
   - Filter synchronization: Shared state in App.jsx keeps conversation and traditional filters in sync; useEffect detects changes and highlights modified filters (including keywords)
   - Multi-turn conversation: Conversation history preserved in state, passed to LLM for context-aware responses, location and keywords persist unless explicitly changed

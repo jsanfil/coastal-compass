@@ -73,6 +73,6 @@ Chronological notes of major milestones and decisions.
   - Property type corrections applied - removed incorrect rental-only property type (Apartments_Condos-Co-ops) and updated all mappings to use correct Zillow API values
   - Keyword preservation in multi-turn conversations fixed - keywords now persist across conversation turns when not explicitly overridden
   - Schema enhancements - filter schema now handles keywords arrays and comma-separated strings with automatic transformation
-  - UI improvements - keyword checkboxes added to FilterPanel, individual keyword tags displayed in PropertyGrid active filters
+  - UI improvements - keyword text input field added to FilterPanel, individual keyword tags displayed in PropertyGrid active filters
   - LLM prompt optimizations - updated to use exact API values and include keyword preservation instructions
 - Fixed LLM property type recognition issue - added explicit instruction requiring home_type to be set when users mention property types like "homes", "houses", etc., resolving parsing failures where "homes" wasn't mapped to "Houses"
