@@ -24,7 +24,7 @@ Technologies and constraints that shape the system.
 
 - Key dependencies:
   - Frontend: React, React DOM, Tailwind CSS, PostCSS, Autoprefixer
-  - Backend: Express, CORS, dotenv, node-fetch
+  - Backend: Express, CORS, dotenv, node-fetch, zod
   - Dev dependencies: Vite plugins, ESLint (implied), Nodemon
   - External APIs: Zillow API via RapidAPI (propertyExtendedSearch endpoint), OpenRouter API (Claude-3-Haiku for LLM parsing)
 

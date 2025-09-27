@@ -46,8 +46,10 @@ Tracks the current state of development.
   - Zillow API response structure varies; need robust data normalization
   - Client expects consistent property object structure (id, address, city, state, price, beds, baths, sqft, propertyType, imgSrc, permalink)
   - Port configuration needs alignment between client and server
-  - Current implementation supports traditional filters but lacks conversational features
+  - Full conversational search flow successfully implemented with LLM integration
   - Location preservation is critical for multi-turn conversations - users expect location to persist unless explicitly changed
   - Filter change highlighting provides essential visual feedback for seamless conversation-to-traditional switching
   - Shared state pattern enables perfect synchronization between conversational and traditional filter controls
   - UI consistency (typography, spacing) enhances perceived professionalism and user trust
+  - Zod schemas provide robust validation for API requests and responses
+  - Multi-turn dialogue requires careful conversation history management for context-aware LLM responses

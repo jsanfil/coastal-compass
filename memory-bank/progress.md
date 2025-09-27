@@ -46,4 +46,6 @@ Chronological notes of major milestones and decisions.
   - 2025-09-25: Location preservation fix in multi-turn conversations - location persists unless explicitly changed by user
   - 2025-09-25: UI typography consistency - Conversation and Advanced Filters headers now match in font size
   - 2025-09-25: Enhanced UX improvements implemented - error states, welcome state, improved loading feedback, and retry mechanisms
+  - 2025-09-25: Filter clearing bug fixed - direct detection for clearing commands in LLM service
+  - 2025-09-26: Memory Bank updated and validated for consistency - corrected outdated learnings, added Zod schema documentation
   - Project now has core conversational features implemented - natural language search working end-to-end
