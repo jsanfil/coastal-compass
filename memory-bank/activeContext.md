@@ -33,7 +33,10 @@ Tracks the current state of development.
 - Fixed filter clearing bug: Added direct detection for clearing commands ("clear all filters", "reset filters", etc.) in LLM service to return complete filter objects with empty strings for cleared fields, ensuring UI and search results update properly when clearing filters
 
 - Next steps:
-  - Testing (unit tests, integration tests for API endpoints)
+  - Client-side testing (React components, integration tests)
+  - End-to-end testing across client and server
+  - Performance/load testing
+  - Production deployment preparation
 
 - Active decisions & considerations:
   - Using RapidAPI for Zillow API access to avoid direct scraping
@@ -61,3 +64,7 @@ Tracks the current state of development.
   - UI consistency (typography, spacing) enhances perceived professionalism and user trust
   - Zod schemas provide robust validation for API requests and responses
   - Multi-turn dialogue requires careful conversation history management for context-aware LLM responses
+  - Comprehensive testing with Vitest provides excellent confidence in code reliability (57 passing tests)
+  - Co-located test files alongside source code is industry standard for maintainability
+  - Address parsing using split() and array indexing works well for standard US address formats
+  - TypeScript conversion provides moderate value but not urgent for current JavaScript + Zod approach

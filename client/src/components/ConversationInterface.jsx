@@ -102,6 +102,11 @@ export default function ConversationInterface({ conversation, onSubmit, loading,
                             type="text"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !loading && !disabled && input.trim()) {
+                                    handleSubmit(e)
+                                }
+                            }}
                             onFocus={() => setShowSuggestions(true)}
                             onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                             placeholder="Tell me what you're looking for... (e.g., '3 bedroom homes under $2M')"

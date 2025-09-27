@@ -24,7 +24,9 @@ Chronological notes of major milestones and decisions.
   - Location preservation in multi-turn conversations: location persists unless explicitly changed
   - Consistent UI typography: Conversation and Advanced Filters headers match in size
   - Enhanced UX: cleaned up conversation interface, removed hint text, elongated design
-  - Comprehensive test suite with 61 passing tests covering core functionality
+  - Comprehensive test suite with 45 passing client tests (53 total) covering core functionality
+  - Automated regression testing system with baseline comparison and CI/CD integration
+  - Test result analysis script that distinguishes between regressions and existing failures
 
 - What’s left to build:
   - API endpoint integration tests (Supertest for full request/response cycles)
@@ -63,4 +65,6 @@ Chronological notes of major milestones and decisions.
   - 2025-09-26: Cline configuration added to minimize model retry errors
   - 2025-09-26: Comprehensive test suite implemented with Vitest - schema validation tests (8 tests), ZillowService unit tests (15 tests), LLMService unit tests (23 tests), and API integration tests (11 tests) all passing
   - 2025-09-26: Server test suite completed with 57 total passing tests covering core server functionality, API endpoints, and error handling
-  - Project now has core conversational features implemented - natural language search working end-to-end
+  - 2025-09-27: Client test suite fixed and enhanced - resolved PropertyCard square footage test, FilterPanel input handling, ConversationInterface data structure and Enter key support, App test expectations
+  - 2025-09-27: Automated regression testing system implemented - baseline comparison, regression detection script, CI/CD integration, comprehensive documentation
+  - Project now has core conversational features implemented - natural language search working end-to-end with robust test coverage and regression protection

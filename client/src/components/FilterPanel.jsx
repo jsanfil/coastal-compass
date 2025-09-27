@@ -92,10 +92,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
         <div className="bg-sage-green border border-teal-border rounded-2xl p-4 shadow-lg mb-6 font-['Poppins']">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4 mb-4">
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="location" className="block text-xs font-medium mb-1 text-blue-teal">
                         Location
                     </label>
                     <input
+                        id="location"
                         type="text"
                         value={filters.location || ''}
                         onChange={(e) => updateFilter('location', e.target.value)}
@@ -105,10 +106,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="minPrice" className="block text-xs font-medium mb-1 text-blue-teal">
                         Min Price
                     </label>
                     <select
+                        id="minPrice"
                         value={filters.minPrice || ''}
                         onChange={(e) => updateFilter('minPrice', e.target.value)}
                         className="w-full px-3 py-2 border border-teal-border rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:border-warm-coral"
@@ -120,10 +122,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="maxPrice" className="block text-xs font-medium mb-1 text-blue-teal">
                         Max Price
                     </label>
                     <select
+                        id="maxPrice"
                         value={filters.maxPrice || ''}
                         onChange={(e) => updateFilter('maxPrice', e.target.value)}
                         className="w-full px-3 py-2 border border-teal-border rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:border-warm-coral"
@@ -135,10 +138,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="propertyType" className="block text-xs font-medium mb-1 text-blue-teal">
                         Property Type
                     </label>
                     <select
+                        id="propertyType"
                         value={filters.home_type || ''}
                         onChange={(e) => updateFilter('home_type', e.target.value)}
                         className="w-full px-3 py-2 border border-teal-border rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:border-warm-coral"
@@ -150,10 +154,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="bedrooms" className="block text-xs font-medium mb-1 text-blue-teal">
                         Bedrooms
                     </label>
                     <select
+                        id="bedrooms"
                         value={filters.bedsMin || ''}
                         onChange={(e) => updateFilter('bedsMin', e.target.value)}
                         className="w-full px-3 py-2 border border-teal-border rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:border-warm-coral"
@@ -165,10 +170,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="bathrooms" className="block text-xs font-medium mb-1 text-blue-teal">
                         Bathrooms
                     </label>
                     <select
+                        id="bathrooms"
                         value={filters.bathsMin || ''}
                         onChange={(e) => updateFilter('bathsMin', e.target.value)}
                         className="w-full px-3 py-2 border border-teal-border rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:border-warm-coral"
@@ -180,10 +186,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="minSqft" className="block text-xs font-medium mb-1 text-blue-teal">
                         Min SqFt
                     </label>
                     <input
+                        id="minSqft"
                         type="text"
                         value={filters.sqftMin || ''}
                         onChange={(e) => {
@@ -196,10 +203,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="maxSqft" className="block text-xs font-medium mb-1 text-blue-teal">
                         Max SqFt
                     </label>
                     <input
+                        id="maxSqft"
                         type="text"
                         value={filters.sqftMax || ''}
                         onChange={(e) => {
@@ -212,10 +220,11 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
                 </div>
 
                 <div>
-                    <label className="block text-xs font-medium mb-1 text-blue-teal">
+                    <label htmlFor="sortBy" className="block text-xs font-medium mb-1 text-blue-teal">
                         Sort By
                     </label>
                     <select
+                        id="sortBy"
                         value={filters.sort || 'Price_High_Low'}
                         onChange={(e) => updateFilter('sort', e.target.value)}
                         className="w-full px-3 py-2 border border-teal-border rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:border-warm-coral"

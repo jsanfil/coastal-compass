@@ -73,3 +73,7 @@ Thumbs.db
 # Build outputs
 dist/
 build/
+
+# Test results (exclude current, include baseline)
+client/test-results.json
+!client/test-results-baseline.json
