@@ -13,6 +13,8 @@ Architectural conventions and key technical decisions.
   - Container/Presentational pattern (App.jsx manages state, components handle display)
   - API proxy pattern (server acts as secure intermediary for external API calls)
   - State lifting pattern (filters and properties state managed at App level)
+  - Event-driven architecture pattern (window event listeners for cross-component communication)
+  - Comprehensive state reset pattern (handleReset function clears all app state)
   - Error boundary pattern (try/catch blocks around async operations)
 
 - Component/module relationships:

@@ -34,5 +34,7 @@ Technologies and constraints that shape the system.
   - Response data normalization handles multiple possible Zillow API response formats
   - LLM parsing preserves conversation context and location unless explicitly changed
   - Filter synchronization uses shared state with change detection and highlighting
+  - Event-driven retry system uses window event listeners for cross-component communication
+  - Comprehensive state reset pattern clears all app state (properties, conversation, filters, errors)
   - Error handling with console logging and structured error responses
   - State management via React useState hooks (no external state libraries)

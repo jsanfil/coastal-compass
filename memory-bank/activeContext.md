@@ -8,6 +8,12 @@ Tracks the current state of development.
   - Memory Bank maintenance and documentation updates
 
 - Recent changes:
+  - Reset button functionality added with comprehensive app state reset (handleReset function)
+  - Enhanced error handling with retry mechanisms for search and conversation failures
+  - Event-driven retry system implemented using window event listeners (handleRetrySearch, handleRetryConversation)
+  - UI/UX improvements: cleaned up conversation interface, removed hint text, elongated design
+  - Updated active filters UX and fixed location logic in filter handling
+  - Added Cline configuration to minimize model retry errors
   - Server-side LLM support implemented using OpenRouter API with Claude-3-Haiku
   - LLMService class added for parsing natural language prompts into structured filters
   - API endpoints added: /api/parse-prompt for prompt parsing, /api/models for model info
@@ -36,6 +42,8 @@ Tracks the current state of development.
   - Tailwind CSS for styling with custom color scheme (blue-teal, warm-beige)
 
 - Important patterns/preferences:
+  - Event-driven architecture for cross-component communication (window event listeners for retry mechanisms)
+  - Comprehensive state reset pattern (handleReset function clears all app state)
   - ESM modules throughout (client and server)
   - Environment variables for API configuration
   - Consistent error handling with try/catch blocks
