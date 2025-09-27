@@ -1,0 +1,20 @@
+{
+    "provider": "openrouter",
+    "apiKeyEnv": "OPENROUTER_API_KEY",
+    "model": "x-ai/grok-code-fast-1",
+    "temperature": 0.2,
+    "maxOutputTokens": 2048,
+    "timeoutMs": 240000,
+    "seed": 7,
+    "fallbacks": [
+        {
+            "model": "x-ai/grok-2-mini"
+        },
+        {
+            "model": "openai/gpt-4o-mini"
+        },
+        {
+            "model": "anthropic/claude-3.5-haiku"
+        }
+    ]
+}
