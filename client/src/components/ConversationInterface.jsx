@@ -39,7 +39,7 @@ export default function ConversationInterface({ conversation, onSubmit, loading,
             {conversation.length > 0 && (
                 <div className="p-4 border-b border-teal-border/30">
                     <h3 className="font-medium text-blue-teal mb-3">Conversation</h3>
-                    <div className="max-h-48 overflow-y-auto space-y-3" ref={scrollRef}>
+                    <div className="max-h-64 overflow-y-auto space-y-3" ref={scrollRef}>
                         {conversation.map((message, index) => (
                             <div key={index} className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                 <div className={`max-w-[80%] rounded-lg px-3 py-2 text-sm ${message.role === 'user'
@@ -135,11 +135,6 @@ export default function ConversationInterface({ conversation, onSubmit, loading,
                         )}
                     </button>
                 </form>
-
-                {/* Helper text */}
-                <div className="mt-2 text-xs text-gray-500">
-                    💡 Try: "Show me 4BR homes with ocean views under $3M" or "Family homes in Aptos"
-                </div>
             </div>
         </div>
     )
