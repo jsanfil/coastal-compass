@@ -31,6 +31,7 @@ describe('FilterPanel', () => {
         expect(screen.getByLabelText('Min SqFt')).toBeInTheDocument()
         expect(screen.getByLabelText('Max SqFt')).toBeInTheDocument()
         expect(screen.getByLabelText('Sort By')).toBeInTheDocument()
+        expect(screen.getByLabelText('Keywords')).toBeInTheDocument()
         expect(screen.getByText('Search')).toBeInTheDocument()
     })
 
@@ -119,11 +120,11 @@ describe('FilterPanel', () => {
         )
 
         const propertyTypeSelect = screen.getByLabelText('Property Type')
-        fireEvent.change(propertyTypeSelect, { target: { value: 'Apartments_Condos_Co-ops' } })
+        fireEvent.change(propertyTypeSelect, { target: { value: 'Condos' } })
 
         expect(mockOnFiltersChange).toHaveBeenCalledWith({
             ...mockFilters,
-            home_type: 'Apartments_Condos_Co-ops'
+            home_type: 'Condos'
         })
     })
 
@@ -299,9 +300,9 @@ describe('FilterPanel', () => {
         expect(propertyTypeSelect).toHaveDisplayValue('Any Type')
 
         // Check that options are rendered
-        expect(screen.getByText('Houses')).toBeInTheDocument()
-        expect(screen.getByText('Apartments/Condos/Co-ops')).toBeInTheDocument()
-        expect(screen.getByText('Multi-family')).toBeInTheDocument()
+        expect(screen.getByText('Single Family Homes')).toBeInTheDocument()
+        expect(screen.getByText('Apartments')).toBeInTheDocument()
+        expect(screen.getByText('Multi-Family')).toBeInTheDocument()
     })
 
     it('renders all sort options', () => {
@@ -318,5 +319,86 @@ describe('FilterPanel', () => {
         expect(screen.getByText('Price: Low to High')).toBeInTheDocument()
         expect(screen.getByText('SqFt: High to Low')).toBeInTheDocument()
         expect(screen.getByText('Newest First')).toBeInTheDocument()
+    })
+
+    it('displays keywords as comma-separated values', () => {
+        const filtersWithKeywords = {
+            ...mockFilters,
+            keywords: ['pool', 'garden', 'ocean view']
+        }
+
+        render(
+            <FilterPanel
+                filters={filtersWithKeywords}
+                onFiltersChange={mockOnFiltersChange}
+                onSearch={mockOnSearch}
+                loading={false}
+            />
+        )
+
+        const keywordsInput = screen.getByLabelText('Keywords')
+        expect(keywordsInput).toHaveValue('pool, garden, ocean view')
+    })
+
+    it('calls onFiltersChange when keywords input changes', () => {
+        render(
+            <FilterPanel
+                filters={mockFilters}
+                onFiltersChange={mockOnFiltersChange}
+                onSearch={mockOnSearch}
+                loading={false}
+            />
+        )
+
+        const keywordsInput = screen.getByLabelText('Keywords')
+        fireEvent.change(keywordsInput, { target: { value: 'pool, garden, ocean view' } })
+
+        expect(mockOnFiltersChange).toHaveBeenCalledWith({
+            ...mockFilters,
+            keywords: ['pool', 'garden', 'ocean view']
+        })
+    })
+
+    it('parses comma-separated keywords correctly', () => {
+        render(
+            <FilterPanel
+                filters={mockFilters}
+                onFiltersChange={mockOnFiltersChange}
+                onSearch={mockOnSearch}
+                loading={false}
+            />
+        )
+
+        const keywordsInput = screen.getByLabelText('Keywords')
+        fireEvent.change(keywordsInput, { target: { value: '  pool  ,  garden, ocean view  ' } })
+
+        expect(mockOnFiltersChange).toHaveBeenCalledWith({
+            ...mockFilters,
+            keywords: ['pool', 'garden', 'ocean view']
+        })
+    })
+
+    it('handles empty keywords input', () => {
+        const filtersWithKeywords = {
+            ...mockFilters,
+            keywords: ['pool', 'garden']
+        }
+
+        render(
+            <FilterPanel
+                filters={filtersWithKeywords}
+                onFiltersChange={mockOnFiltersChange}
+                onSearch={mockOnSearch}
+                loading={false}
+            />
+        )
+
+        const keywordsInput = screen.getByLabelText('Keywords')
+        fireEvent.change(keywordsInput, { target: { value: '' } })
+
+        expect(mockOnFiltersChange).toHaveBeenCalledWith({
+            ...mockFilters,
+            keywords: []
+        })
     })
 })

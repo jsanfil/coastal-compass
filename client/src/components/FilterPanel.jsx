@@ -1,24 +1,4 @@
-import { useState } from 'react'
 
-// Keyword mapping for display
-const KEYWORD_DISPLAY_MAP = {
-    pool: "Pool",
-    waterfront: "Waterfront",
-    singleStory: "Single Story",
-    newConstruction: "New Construction",
-    garage: "Garage",
-    fireplace: "Fireplace",
-    basement: "Basement",
-    adu: "ADU/Guest House",
-    guestHouse: "Guest House",
-    solar: "Solar Panels",
-    view: "View",
-    fixer: "Fixer-Upper",
-    openFloorPlan: "Open Floor Plan",
-    garden: "Garden/Landscaped"
-};
-
-const AVAILABLE_KEYWORDS = Object.keys(KEYWORD_DISPLAY_MAP);
 
 const PROPERTY_TYPES = [
     { value: '', label: 'Any Type' },
@@ -109,13 +89,7 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
         onFiltersChange({ ...filters, [key]: value })
     }
 
-    const updateKeywords = (keyword, checked) => {
-        const currentKeywords = filters.keywords || [];
-        const newKeywords = checked
-            ? [...currentKeywords, keyword]
-            : currentKeywords.filter(k => k !== keyword);
-        onFiltersChange({ ...filters, keywords: newKeywords });
-    }
+
 
     return (
         <div className="bg-sage-green border border-teal-border rounded-2xl p-4 shadow-lg mb-6 font-['Poppins']">
@@ -267,20 +241,23 @@ export default function FilterPanel({ filters, onFiltersChange, onSearch, loadin
 
             {/* Keywords Section */}
             <div className="mb-4">
-                <div className="text-xs font-medium mb-2 text-blue-teal">Features & Amenities</div>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                    {AVAILABLE_KEYWORDS.map(keyword => (
-                        <label key={keyword} className="flex items-center text-sm">
-                            <input
-                                type="checkbox"
-                                checked={(filters.keywords || []).includes(keyword)}
-                                onChange={(e) => updateKeywords(keyword, e.target.checked)}
-                                className="mr-2 w-4 h-4 text-blue-teal bg-white border-teal-border rounded focus:ring-warm-coral focus:ring-2"
-                            />
-                            {KEYWORD_DISPLAY_MAP[keyword]}
-                        </label>
-                    ))}
-                </div>
+                <label htmlFor="keywords" className="block text-xs font-medium mb-1 text-blue-teal">
+                    Keywords
+                </label>
+                <input
+                    id="keywords"
+                    type="text"
+                    value={(filters.keywords || []).join(', ')}
+                    onChange={(e) => {
+                        const keywords = e.target.value
+                            .split(',')
+                            .map(k => k.trim())
+                            .filter(k => k.length > 0);
+                        updateFilter('keywords', keywords);
+                    }}
+                    placeholder="ocean view, pool, garden"
+                    className="w-full px-3 py-2 border border-teal-border rounded-lg text-sm bg-white text-gray-900 focus:outline-none focus:border-warm-coral"
+                />
             </div>
 
             <div className="text-right">
