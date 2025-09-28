@@ -6,7 +6,7 @@ A full-stack web application that provides a **conversational, natural-language 
 
 - **Conversational Search**: Describe your dream home in natural language (e.g., "Show me 3-bedroom homes near La Jolla under $2M with ocean views")
 - **LLM-Powered Parsing**: Advanced language model integration to understand and process user prompts into precise filter criteria
-- **Multi-turn Dialogue**: Refine your search through conversational follow-ups (e.g., "Make it 4 bedrooms instead" or "Show me condos instead")
+- **Multi-turn Dialogue**: Refine your search through conversational follow-ups (e.g., "Make it 4 bedrooms instead")
 - **Filter Transparency**: Always see the current active filters being applied, adjustable through both conversation and traditional UI controls
 - **Zillow API Integration**: Real-time access to comprehensive real estate data via RapidAPI proxy
 - **Modern UI**: Responsive, accessible design built with React, TypeScript, Tailwind CSS, and shadcn/ui components
@@ -85,37 +85,21 @@ Before running this application, you'll need:
 
 3. **Open your browser** and navigate to the client URL to start searching for properties!
 
-## 🔍 API Usage
+## 🧪 Testing
 
-The application provides a RESTful API endpoint:
-
-### Search Properties
+**Server tests:**
+```bash
+cd server
+npm test
 ```
-GET /api/search?location=Carlsbad,CA&minPrice=100000&maxPrice=500000&propertyType=SINGLE_FAMILY&bedrooms=3&bathrooms=2&minSqft=1500&maxSqft=3000&sortBy=price_desc
+
+**Client tests:**
+```bash
+cd client
+npm test
 ```
 
-**Query Parameters:**
-- `location`: City, state, or ZIP code (required)
-- `minPrice`/`maxPrice`: Price range filters
-- `propertyType`: Property type (SINGLE_FAMILY, CONDO, TOWNHOUSE, etc.)
-- `bedrooms`/`bathrooms`: Minimum bedroom/bathroom count
-- `minSqft`/`maxSqft`: Square footage range
-- `sortBy`: Sort order (price_desc, price_asc, sqft_desc, sqft_asc, date_desc)
-
-## 🛠️ Development
-
-### Available Scripts
-
-**Server:**
-- `npm start`: Start the production server
-- `npm run dev`: Start with nodemon for development
-
-**Client:**
-- `npm run dev`: Start the development server
-- `npm run build`: Build for production
-- `npm run preview`: Preview the production build
-
-### Project Structure
+## 📁 Project Structure
 
 ```
 coastal-compass/
@@ -135,49 +119,17 @@ coastal-compass/
 │   ├── index.js            # Express server with Zillow API proxy
 │   ├── .env.example        # Environment variables template
 │   ├── package.json
-│   └── package-lock.json
+│   └── src/
+│       ├── routes/         # API endpoints
+│       ├── services/       # Business logic (Zillow, LLM services)
+│       ├── schemas/        # Data validation schemas
+│       └── lib/            # Utility functions
 ├── memory-bank/            # Project documentation and context
-│   ├── projectbrief.md     # Core project requirements and goals
-│   ├── productContext.md   # Why project exists and user experience goals
-│   ├── activeContext.md    # Current work focus and recent changes
-│   ├── systemPatterns.md   # Architectural patterns and decisions
-│   ├── techContext.md      # Technology stack and constraints
-│   └── progress.md         # Development progress and milestones
 ├── .clinerules/            # Project guardrails and conventions
 ├── .gitignore
 ├── package.json            # Root package.json (workspace)
-├── package-lock.json
 └── README.md
 ```
-
-## 📚 Learning Objectives
-
-This project demonstrates:
-
-- **Conversational AI Integration**: Implementing natural language processing for user interactions
-- **LLM Integration**: Working with large language models to parse and understand user intent
-- **Multi-turn Dialogue Systems**: Building conversational interfaces that maintain context
-- **API Integration**: How to work with third-party REST APIs securely
-- **Full-Stack Development**: Client-server communication patterns and state synchronization
-- **React State Management**: Managing complex filter states across conversational and traditional UI
-- **Responsive UI Design**: Creating mobile-friendly interfaces with modern design systems
-- **Environment Configuration**: Secure handling of API keys and sensitive configuration
-- **Error Handling**: Graceful handling of API failures and user input validation
-
-## 🚧 Current Development Status
-
-**Implemented:**
-- Basic Zillow API integration with property search and display
-- Traditional filter controls (price, location, property type, beds/baths, sqft)
-- Responsive React UI with Tailwind CSS styling
-- Server-side API proxy for secure key management
-
-**Planned (Not Yet Implemented):**
-- Conversational search interface with natural language input
-- LLM-powered prompt parsing and filter extraction
-- Multi-turn dialogue support for search refinement
-- Filter transparency and synchronization between conversation and UI controls
-- Enhanced user experience with loading states and error handling
 
 ## 🤝 Contributing
 
