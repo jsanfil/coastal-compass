@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 
 /**
- * Service for interacting with Zillow API via RapidAPI
+ * Service for interacting with housing data APIs via RapidAPI
  */
 export class ZillowService {
     constructor() {
@@ -15,7 +15,7 @@ export class ZillowService {
     }
 
     /**
-     * Search for properties using Zillow API
+     * Search for properties using the configured RapidAPI housing endpoint
      * @param {Object} filters - Filter criteria
      * @returns {Promise<Array>} Array of normalized property objects
      */
@@ -27,7 +27,7 @@ export class ZillowService {
             // Build query parameters from filters
             this._buildQueryParams(url, filters);
 
-            console.log('Zillow API Request URL:', url.toString());
+            console.log('Housing API Request URL:', url.toString());
 
             const response = await fetch(url, {
                 headers: {
@@ -36,14 +36,14 @@ export class ZillowService {
                 }
             });
 
-            console.log('Zillow API Response status:', response.status);
+            console.log('Housing API Response status:', response.status);
 
             if (!response.ok) {
-                throw new Error(`Zillow API error: ${response.status} ${response.statusText}`);
+                throw new Error(`Housing API error: ${response.status} ${response.statusText}`);
             }
 
             const data = await response.json();
-            console.log('Zillow API Raw response:', data);
+            console.log('Housing API Raw response:', data);
 
             const properties = this._normalizeResponse(data);
 
@@ -51,7 +51,7 @@ export class ZillowService {
 
             return properties;
         } catch (error) {
-            console.error('Zillow API search failed:', error);
+            console.error('Housing API search failed:', error);
             throw new Error(`Failed to search properties: ${error.message}`);
         }
     }
@@ -110,7 +110,7 @@ export class ZillowService {
     }
 
     /**
-     * Normalize Zillow API response to consistent format
+     * Normalize housing API response to consistent format
      * @param {Object} data - Raw API response
      * @returns {Array} Normalized property objects
      */

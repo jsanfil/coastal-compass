@@ -1,6 +1,6 @@
 # Coastal Compass
 
-A full-stack web application that provides a **conversational, natural-language experience** for searching residential real estate. Users can describe what they're looking for in plain English, and the system translates those prompts into structured search criteria, fetches matching listings via the Zillow API, and displays results in a modern, responsive UI.
+A full-stack web application that provides a **conversational, natural-language experience** for searching residential real estate. Users can describe what they're looking for in plain English, and the system translates those prompts into structured search criteria, fetches matching listings via a RapidAPI housing data endpoint, and displays results in a modern, responsive UI.
 
 ## 🚀 Features
 
@@ -8,7 +8,7 @@ A full-stack web application that provides a **conversational, natural-language 
 - **LLM-Powered Parsing**: Advanced language model integration to understand and process user prompts into precise filter criteria
 - **Multi-turn Dialogue**: Refine your search through conversational follow-ups (e.g., "Make it 4 bedrooms instead")
 - **Filter Transparency**: Always see the current active filters being applied, adjustable through both conversation and traditional UI controls
-- **Zillow API Integration**: Real-time access to comprehensive real estate data via RapidAPI proxy
+- **Housing API Integration**: Real-time access to comprehensive real estate data via RapidAPI proxy
 - **Modern UI**: Responsive, accessible design built with React, TypeScript, Tailwind CSS, and shadcn/ui components
 - **Advanced Filtering**: Traditional controls for price range, property type, bedrooms, bathrooms, square footage, and sorting options
 
@@ -17,14 +17,14 @@ A full-stack web application that provides a **conversational, natural-language 
 This application follows a client-server architecture:
 
 - **Client** (`/client`): React application built with Vite, featuring a modern UI for property search and display
-- **Server** (`/server`): Node.js Express server that handles API requests and communicates with RapidAPI Zillow endpoints
+- **Server** (`/server`): Node.js Express server that handles API requests and communicates with RapidAPI housing endpoints
 
 ## 📋 Prerequisites
 
 Before running this application, you'll need:
 
 1. **Node.js** (v16 or higher)
-2. **RapidAPI Account** with access to the Zillow API
+2. **RapidAPI Account** with access to the housing API endpoint
 3. **RapidAPI Key** for authentication
 
 ## 🔧 Installation
@@ -60,8 +60,8 @@ Before running this application, you'll need:
 2. **Edit the `.env` file** with your RapidAPI credentials:
    ```
    RAPIDAPI_KEY=your_rapidapi_key_here
-   RAPIDAPI_HOST=zillow-com1.p.rapidapi.com
-   ZILLOW_SEARCH_PATH=/search
+   RAPIDAPI_HOST=us-housing-market-data1.p.rapidapi.com
+   ZILLOW_SEARCH_PATH=/propertyExtendedSearch
    PORT=3001
    ```
 
@@ -116,7 +116,7 @@ coastal-compass/
 │   ├── tailwind.config.js  # Tailwind CSS configuration
 │   └── postcss.config.js   # PostCSS configuration
 ├── server/                 # Node.js backend
-│   ├── index.js            # Express server with Zillow API proxy
+│   ├── index.js            # Express server with RapidAPI housing data proxy
 │   ├── .env.example        # Environment variables template
 │   ├── package.json
 │   └── src/
@@ -141,8 +141,8 @@ This is an educational project. Feel free to:
 
 ## 📄 License
 
-This project is for educational purposes. Please check RapidAPI's terms of service for commercial usage of their Zillow API.
+This project is for educational purposes. Please check RapidAPI's terms of service for commercial usage of the selected housing data API.
 
 ## ⚠️ Disclaimer
 
-This application is for educational purposes only. Always verify real estate information with official sources. Property data is provided by Zillow via RapidAPI and may not be current or accurate.
+This application is for educational purposes only. Always verify real estate information with official sources. Property data is provided by RapidAPI sources and may not be current or accurate.
